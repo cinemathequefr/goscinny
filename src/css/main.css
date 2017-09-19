@@ -24,9 +24,17 @@ svg path {
 .main img {
   display: block;
   position: absolute;
-  left: 100px;
-  bottom: 13.5vh;
 }
+
+#rg {
+  left: 310px; bottom: -100px; 
+}
+
+#studio {
+  left: 100px; bottom: 20px;
+}
+
+
 
 
 

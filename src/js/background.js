@@ -29,7 +29,7 @@ function resize () {
     .attr("width", window.innerWidth)
     .attr("height", window.innerHeight)
     .select("g")
-    .attr("transform", "translate(" + (window.innerWidth / 2) + "," + (window.innerHeight * 0.667) + ")");
+    .attr("transform", "translate(" + (window.innerWidth / 2) + "," + (window.innerHeight - 180) + ")");
 }
 
 rotate = {
