@@ -13,10 +13,23 @@ svg path {
   fill: #f30;
 }
 
-img {
+
+
+.main {
   position: absolute;
-  top: calc(50% - 220px); left: calc(50% - 150px);
+  top: 0; bottom: 0; left: calc(50vw - 500px);
+  width: 1000px;
 }
+
+.main img {
+  display: block;
+  position: absolute;
+  left: 100px;
+  bottom: 13.5vh;
+}
+
+
+
 
 rect {
   fill: #369;

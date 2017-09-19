@@ -25,7 +25,7 @@ function init (count) {
 }
 
 function resize () {
-  d3.select("svg")
+  d3.select(".backgroundContainer svg")
     .attr("width", window.innerWidth)
     .attr("height", window.innerHeight)
     .select("g")
