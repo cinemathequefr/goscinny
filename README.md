@@ -19,16 +19,16 @@ Rang 2
 
 * (8) 9 - Pierre Dac
 * (9) 29 - Valérie Lemercier
-* () Jean Rochefort
-* () Édouard Baer
-* () Jean Poiret
-* () John Ford
-* () Daniel Prévost
-* () Pierre Desproges
+* (10) 35 - Jean Rochefort
+* (11) 4 - Édouard Baer
+* (12) 32 - Jean Poiret
+* (13) 19 - John Ford
+* (14) 33 - Daniel Prévost
+* (15) 14 - Pierre Desproges
 
 Rang 3
 
-* () Michel Serrault
+* (16) 36 - Michel Serrault
 * () Robert Dhéry
 * () Boby Lapointe
 * () Alain Chabat

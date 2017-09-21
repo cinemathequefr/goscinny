@@ -2,8 +2,8 @@ import route from "riot-route";
 import background from "./background.js";
 
 
-// var peopleAnimation = "jello";
-var peopleAnimation = "flipInX";
+var peopleAnimation = "jello";
+// var peopleAnimation = "flipInX";
 
 $(() => {
   $.getJSON("data/data.json").then(run);
@@ -18,12 +18,16 @@ function run (data) {
   $("body").on("click", background.rotate.toggle);
 
 
-  _(data).filter(d => d.z !== 0).orderBy("z").forEach((d, i) => {
+  _(data).filter(d => d.z !== 0).orderBy("z").forEach((d, i, j) => {
 
     window.setTimeout(function () {
-      var $el = $("<img style='z-index: " + (data.length - d.z) + "; width: " + (d.w / 2) + "px; height: auto; left:" + (d.x  / 2) + "px; bottom:" + (d.y / 2) + "px;' class='animated " + peopleAnimation + "' src='img/people/" + d.id + ".png' alt=''>").appendTo(".peopleContainer");
+      var $el = $("<img style='z-index: " + (data.length - d.z) + "; width: " + (d.w / 2) + "px; height: auto; left:" + (d.x  / 2) + "px; bottom:" + (d.y / 2) + "px;' class='animated flipInX' src='img/people/" + d.id + ".png' alt=''>").appendTo(".peopleContainer");
+      if (i + 1 === j.length) {
+        $el.on("animationend", () => {
+          $(".peopleContainer img").removeClass("flipInX");
+        });
+      }
     }, 200 * i);
-
   });
 
 
