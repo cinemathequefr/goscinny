@@ -7,62 +7,62 @@ Site pour l'exposition Goscinny &amp; le cinéma à la Cinémathèque française
 
 Rang 1
 
-2 - Alexandre Astier
-27 - Patrice Leconte
-40 - Jean Yanne
-26 - Laurel et Hardy
-20 - Louis de Funès
-37 - Pierre Tchérnia
-10 - Micheline Dax
+* (1) 2 - Alexandre Astier
+* (2) 28 - Patrice Leconte
+* (3) 40 - Jean Yanne
+* (4) 27 - Laurel et Hardy
+* (5) 20 - Louis de Funès
+* (6) 37 - Pierre Tchernia
+* (7) 10 - Micheline Dax
 
 Rang 2
 
-9 - Pierre Dac
-29 - Valérie Lemercier
-35 - Jean Rochefort
-4 - Édouard Baer
-32 - Jean Poiret
-19 - John Ford
-33 - Daniel Prévost
-14 - Pierre Desproges
+* (8) 9 - Pierre Dac
+* (9) 29 - Valérie Lemercier
+* () Jean Rochefort
+* () Édouard Baer
+* () Jean Poiret
+* () John Ford
+* () Daniel Prévost
+* () Pierre Desproges
 
 Rang 3
 
-36 - Michel Serrault
-13 - Robert Dhéry
-26 - Boby Lapointe
-8 - Alain Chabat
-24 - Michel Hazanavicius
-12 - Gérard Depardieu
-23 - Gotlib
-21 - Michel Galabru
-30 - Marx Brothers
-41 - Michaël Youn
-1 - Woody Allen
+* () Michel Serrault
+* () Robert Dhéry
+* () Boby Lapointe
+* () Alain Chabat
+* () Michel Hazanavicius
+* () Gérard Depardieu
+* () Gotlib
+* () Michel Galabru
+* () Marx Brothers
+* () Michaël Youn
+* () Woody Allen
 
 Rang 4
 
-15 - Walt Disney
-11 - Jamel Debouzze
-16 - Jean Dujardin
-18 - Pierre Étaix
-5 - Bourvil
-39 - Rosy Varte
+* () Walt Disney
+* () Jamel Debouzze
+* () Jean Dujardin
+* () Pierre Étaix
+* () Bourvil
+* () Rosy Varte
 
 Rang 5
 
-31 - Roger Pierre et Jean-Marc Thibault
-6 - Colette Brosset
-7 - Gérard Calvi
-17 - Éric et Ramzy
-25 - Harvey Kurtzman
-34 - Yves Robert
-22 - Terry Gilliam
-38 - Pierre Tornade
+* () Roger Pierre et Jean-Marc Thibault
+* () Colette Brosset
+* () Gérard Calvi
+* () Éric et Ramzy
+* () Harvey Kurtzman
+* () Yves Robert
+* () Terry Gilliam
+* () Pierre Tornade
 
 Hors-rang
 
-3 - Tex Avery
+* () Tex Avery
 
 
 

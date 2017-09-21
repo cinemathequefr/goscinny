@@ -1,248 +1,452 @@
 [
-  {
-    "id": 1,
-    "name": "Woody Allen",
-    "code": "woody-allen",
-    "text": ""
-  },
-  {
-    "id": 2,
-    "name": "Alexandre Astier",
-    "code": "alexandre-astier",
-    "text": ""
-  },
-  {
-    "id": 3,
-    "name": "Tex Avery",
-    "code": "tex-avery",
-    "text": ""
-  },
-  {
-    "id": 4,
-    "name": "Édouard Baer",
-    "code": "edouard-baer",
-    "text": ""
-  },
-  {
-    "id": 5,
-    "name": "Bourvil",
-    "code": "bourvil",
-    "text": ""
-  },
-  {
-    "id": 6,
-    "name": "Colette Brosset",
-    "code": "colette-brosset",
-    "text": ""
-  },
-  {
-    "id": 7,
-    "name": "Gérard Calvi",
-    "code": "gerard-calvi",
-    "text": ""
-  },
-  {
-    "id": 8,
-    "name": "Alain Chabat",
-    "code": "alain-chabat",
-    "text": ""
-  },
-  {
-    "id": 9,
-    "name": "Pierre Dac",
-    "code": "pierre-dac",
-    "text": ""
-  },
-  {
-    "id": 10,
-    "name": "Micheline Dax",
-    "code": "micheline-dax",
-    "text": ""
-  },
-  {
-    "id": 11,
-    "name": "Jamel Debouzze",
-    "code": "jamel-debouzze",
-    "text": ""
-  },
-  {
-    "id": 12,
-    "name": "Gérard Depardieu",
-    "code": "gerard-depardieu",
-    "text": ""
-  },
-  {
-    "id": 13,
-    "name": "Robert Dhéry",
-    "code": "robert-dhery",
-    "text": ""
-  },
-  {
-    "id": 14,
-    "name": "Pierre Desproges",
-    "code": "pierre-desproges",
-    "text": ""
-  },
-  {
-    "id": 15,
-    "name": "Walt Disney",
-    "code": "walt-disney",
-    "text": ""
-  },
-  {
-    "id": 16,
-    "name": "Jean Dujardin",
-    "code": "jean-dujardin",
-    "text": ""
-  },
-  {
-    "id": 17,
-    "name": "Éric et Ramzy",
-    "code": "eric-et-ramzy",
-    "text": ""
-  },
-  {
-    "id": 18,
-    "name": "Pierre Étaix",
-    "code": "pierre-etaix",
-    "text": ""
-  },
-  {
-    "id": 19,
-    "name": "John Ford",
-    "code": "john-ford",
-    "text": ""
-  },
-  {
-    "id": 20,
-    "name": "Louis de Funès",
-    "code": "louis-de-funes",
-    "text": ""
-  },
-  {
-    "id": 21,
-    "name": "Michel Galabru",
-    "code": "michel-galabru",
-    "text": ""
-  },
-  {
-    "id": 22,
-    "name": "Terry Gilliam",
-    "code": "terry-gilliam",
-    "text": ""
-  },
-  {
-    "id": 23,
-    "name": "Gotlib",
-    "code": "gotlib",
-    "text": ""
-  },
-  {
-    "id": 24,
-    "name": "Michel Hazanavicius",
-    "code": "michel-hazanavicius",
-    "text": ""
-  },
-  {
-    "id": 25,
-    "name": "Harvey Kurtzman",
-    "code": "harvey-kurtzman",
-    "text": ""
-  },
-  {
-    "id": 26,
-    "name": "Boby Lapointe",
-    "code": "boby-lapointe",
-    "text": ""
-  },
-  {
-    "id": 27,
-    "name": "Laurel et Hardy",
-    "code": "laurel-et-hardy",
-    "text": ""
-  },
-  {
-    "id": 28,
-    "name": "Patrice Leconte",
-    "code": "patrice-leconte",
-    "text": ""
-  },
-  {
-    "id": 29,
-    "name": "Valérie Lemercier",
-    "code": "valerie-lemercier",
-    "text": ""
-  },
-  {
-    "id": 30,
-    "name": "Marx Brothers",
-    "code": "marx-brothers",
-    "text": ""
-  },
-  {
-    "id": 31,
-    "name": "Roger Pierre et Jean-Marc Thibault",
-    "code": "roger-pierre-et-jean-marc-thibault",
-    "text": ""
-  },
-  {
-    "id": 32,
-    "name": "Jean Poiret",
-    "code": "jean-poiret",
-    "text": ""
-  },
-  {
-    "id": 33,
-    "name": "Daniel Prévost",
-    "code": "daniel-prevost",
-    "text": ""
-  },
-  {
-    "id": 34,
-    "name": "Yves Robert",
-    "code": "yves-robert",
-    "text": ""
-  },
-  {
-    "id": 35,
-    "name": "Jean Rochefort",
-    "code": "jean-rochefort",
-    "text": ""
-  },
-  {
-    "id": 36,
-    "name": "Michel Serrault",
-    "code": "michel-serrault",
-    "text": ""
-  },
-  {
-    "id": 37,
-    "name": "Pierre Tchérnia",
-    "code": "pierre-tchernia",
-    "text": ""
-  },
-  {
-    "id": 38,
-    "name": "Pierre Tornade",
-    "code": "pierre-tornade",
-    "text": ""
-  },
-  {
-    "id": 39,
-    "name": "Rosy Varte",
-    "code": "rosy-varte",
-    "text": ""
-  },
-  {
-    "id": 40,
-    "name": "Jean Yanne",
-    "code": "jean-yanne",
-    "text": ""
-  },
-  {
-    "id": 41,
-    "name": "Michaël Youn",
-    "code": "michael-youn",
-    "text": ""
-  }
-]
+{
+  "id": 1,
+  "name": "Woody Allen",
+  "code": "woody-allen",
+  "text": "",
+  "w": 0,
+  "h": 0,
+  "x": 0,
+  "y": 0,
+  "z": 0
+},
+{
+  "id": 2,
+  "name": "Alexandre Astier",
+  "code": "alexandre-astier",
+  "text": "",
+  "w": 257,
+  "h": 297,
+  "x": 498,
+  "y": 456,
+  "z": 1
+},
+{
+  "id": 3,
+  "name": "Tex Avery",
+  "code": "tex-avery",
+  "text": "",
+  "w": 0,
+  "h": 0,
+  "x": 0,
+  "y": 0,
+  "z": 0
+},
+{
+  "id": 4,
+  "name": "Édouard Baer",
+  "code": "edouard-baer",
+  "text": "",
+  "w": 0,
+  "h": 0,
+  "x": 0,
+  "y": 0,
+  "z": 0
+},
+{
+  "id": 5,
+  "name": "Bourvil",
+  "code": "bourvil",
+  "text": "",
+  "w": 0,
+  "h": 0,
+  "x": 0,
+  "y": 0,
+  "z": 0
+},
+{
+  "id": 6,
+  "name": "Colette Brosset",
+  "code": "colette-brosset",
+  "text": "",
+  "w": 0,
+  "h": 0,
+  "x": 0,
+  "y": 0,
+  "z": 0
+},
+{
+  "id": 7,
+  "name": "Gérard Calvi",
+  "code": "gerard-calvi",
+  "text": "",
+  "w": 0,
+  "h": 0,
+  "x": 0,
+  "y": 0,
+  "z": 0
+},
+{
+  "id": 8,
+  "name": "Alain Chabat",
+  "code": "alain-chabat",
+  "text": "",
+  "w": 0,
+  "h": 0,
+  "x": 0,
+  "y": 0,
+  "z": 0
+},
+{
+  "id": 9,
+  "name": "Pierre Dac",
+  "code": "pierre-dac",
+  "text": "",
+  "w": 310,
+  "h": 289,
+  "x": 477,
+  "y": 600,
+  "z": 8
+},
+{
+  "id": 10,
+  "name": "Micheline Dax",
+  "code": "micheline-dax",
+  "text": "",
+  "w": 275,
+  "h": 350,
+  "x": 734,
+  "y": 531,
+  "z": 7
+},
+{
+  "id": 11,
+  "name": "Jamel Debouzze",
+  "code": "jamel-debouzze",
+  "text": "",
+  "w": 0,
+  "h": 0,
+  "x": 0,
+  "y": 0,
+  "z": 0
+},
+{
+  "id": 12,
+  "name": "Gérard Depardieu",
+  "code": "gerard-depardieu",
+  "text": "",
+  "w": 0,
+  "h": 0,
+  "x": 0,
+  "y": 0,
+  "z": 0
+},
+{
+  "id": 13,
+  "name": "Robert Dhéry",
+  "code": "robert-dhery",
+  "text": "",
+  "w": 0,
+  "h": 0,
+  "x": 0,
+  "y": 0,
+  "z": 0
+},
+{
+  "id": 14,
+  "name": "Pierre Desproges",
+  "code": "pierre-desproges",
+  "text": "",
+  "w": 0,
+  "h": 0,
+  "x": 0,
+  "y": 0,
+  "z": 0
+},
+{
+  "id": 15,
+  "name": "Walt Disney",
+  "code": "walt-disney",
+  "text": "",
+  "w": 0,
+  "h": 0,
+  "x": 0,
+  "y": 0,
+  "z": 0
+},
+{
+  "id": 16,
+  "name": "Jean Dujardin",
+  "code": "jean-dujardin",
+  "text": "",
+  "w": 0,
+  "h": 0,
+  "x": 0,
+  "y": 0,
+  "z": 0
+},
+{
+  "id": 17,
+  "name": "Éric et Ramzy",
+  "code": "eric-et-ramzy",
+  "text": "",
+  "w": 0,
+  "h": 0,
+  "x": 0,
+  "y": 0,
+  "z": 0
+},
+{
+  "id": 18,
+  "name": "Pierre Étaix",
+  "code": "pierre-etaix",
+  "text": "",
+  "w": 0,
+  "h": 0,
+  "x": 0,
+  "y": 0,
+  "z": 0
+},
+{
+  "id": 19,
+  "name": "John Ford",
+  "code": "john-ford",
+  "text": "",
+  "w": 0,
+  "h": 0,
+  "x": 0,
+  "y": 0,
+  "z": 0
+},
+{
+  "id": 20,
+  "name": "Louis de Funès",
+  "code": "louis-de-funes",
+  "text": "",
+  "w": 234,
+  "h": 355,
+  "x": 841,
+  "y": 377,
+  "z": 5
+},
+{
+  "id": 21,
+  "name": "Michel Galabru",
+  "code": "michel-galabru",
+  "text": "",
+  "w": 0,
+  "h": 0,
+  "x": 0,
+  "y": 0,
+  "z": 0
+},
+{
+  "id": 22,
+  "name": "Terry Gilliam",
+  "code": "terry-gilliam",
+  "text": "",
+  "w": 0,
+  "h": 0,
+  "x": 0,
+  "y": 0,
+  "z": 0
+},
+{
+  "id": 23,
+  "name": "Gotlib",
+  "code": "gotlib",
+  "text": "",
+  "w": 0,
+  "h": 0,
+  "x": 0,
+  "y": 0,
+  "z": 0
+},
+{
+  "id": 24,
+  "name": "Michel Hazanavicius",
+  "code": "michel-hazanavicius",
+  "text": "",
+  "w": 0,
+  "h": 0,
+  "x": 0,
+  "y": 0,
+  "z": 0
+},
+{
+  "id": 25,
+  "name": "Harvey Kurtzman",
+  "code": "harvey-kurtzman",
+  "text": "",
+  "w": 0,
+  "h": 0,
+  "x": 0,
+  "y": 0,
+  "z": 0
+},
+{
+  "id": 26,
+  "name": "Boby Lapointe",
+  "code": "boby-lapointe",
+  "text": "",
+  "w": 0,
+  "h": 0,
+  "x": 0,
+  "y": 0,
+  "z": 0
+},
+{
+  "id": 27,
+  "name": "Laurel et Hardy",
+  "code": "laurel-et-hardy",
+  "text": "",
+  "w": 387,
+  "h": 498,
+  "x": 242,
+  "y": 287,
+  "z": 4
+},
+{
+  "id": 28,
+  "name": "Patrice Leconte",
+  "code": "patrice-leconte",
+  "text": "",
+  "w": 341,
+  "h": 340,
+  "x": 217,
+  "y": 147,
+  "z": 2
+},
+{
+  "id": 29,
+  "name": "Valérie Lemercier",
+  "code": "valerie-lemercier",
+  "text": "",
+  "w": 220,
+  "h": 387,
+  "x": 957,
+  "y": 428,
+  "z": 9
+},
+{
+  "id": 30,
+  "name": "Marx Brothers",
+  "code": "marx-brothers",
+  "text": "",
+  "w": 0,
+  "h": 0,
+  "x": 0,
+  "y": 0,
+  "z": 0
+},
+{
+  "id": 31,
+  "name": "Roger Pierre et Jean-Marc Thibault",
+  "code": "roger-pierre-et-jean-marc-thibault",
+  "text": "",
+  "w": 0,
+  "h": 0,
+  "x": 0,
+  "y": 0,
+  "z": 0
+},
+{
+  "id": 32,
+  "name": "Jean Poiret",
+  "code": "jean-poiret",
+  "text": "",
+  "w": 0,
+  "h": 0,
+  "x": 0,
+  "y": 0,
+  "z": 0
+},
+{
+  "id": 33,
+  "name": "Daniel Prévost",
+  "code": "daniel-prevost",
+  "text": "",
+  "w": 0,
+  "h": 0,
+  "x": 0,
+  "y": 0,
+  "z": 0
+},
+{
+  "id": 34,
+  "name": "Yves Robert",
+  "code": "yves-robert",
+  "text": "",
+  "w": 0,
+  "h": 0,
+  "x": 0,
+  "y": 0,
+  "z": 0
+},
+{
+  "id": 35,
+  "name": "Jean Rochefort",
+  "code": "jean-rochefort",
+  "text": "",
+  "w": 0,
+  "h": 0,
+  "x": 0,
+  "y": 0,
+  "z": 0
+},
+{
+  "id": 36,
+  "name": "Michel Serrault",
+  "code": "michel-serrault",
+  "text": "",
+  "w": 0,
+  "h": 0,
+  "x": 0,
+  "y": 0,
+  "z": 0
+},
+{
+  "id": 37,
+  "name": "Pierre Tchernia",
+  "code": "pierre-tchernia",
+  "text": "",
+  "w": 320,
+  "h": 364,
+  "x": 599,
+  "y": 471,
+  "z": 6
+},
+{
+  "id": 38,
+  "name": "Pierre Tornade",
+  "code": "pierre-tornade",
+  "text": "",
+  "w": 0,
+  "h": 0,
+  "x": 0,
+  "y": 0,
+  "z": 0
+},
+{
+  "id": 39,
+  "name": "Rosy Varte",
+  "code": "rosy-varte",
+  "text": "",
+  "w": 0,
+  "h": 0,
+  "x": 0,
+  "y": 0,
+  "z": 0
+},
+{
+  "id": 40,
+  "name": "Jean Yanne",
+  "code": "jean-yanne",
+  "text": "",
+  "w": 287,
+  "h": 439,
+  "x": 880,
+  "y": 135,
+  "z": 3
+},
+{
+  "id": 41,
+  "name": "Michaël Youn",
+  "code": "michael-youn",
+  "text": "",
+  "w": 0,
+  "h": 0,
+  "x": 0,
+  "y": 0,
+  "z": 0
+}]

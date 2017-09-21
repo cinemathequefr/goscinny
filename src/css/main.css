@@ -17,8 +17,9 @@ svg path {
 
 .main {
   position: absolute;
-  top: 0; bottom: 0; left: calc(50vw - 500px);
-  width: 1000px;
+  top: 0; bottom: 0; 
+  left: calc(50vw - 350px); width: 700px;
+  /*left: calc(50vw - 500px); width: 1000px;*/
 }
 
 .main img {
@@ -31,13 +32,33 @@ svg path {
 }
 
 #studio {
-  left: 100px; bottom: 65px;
+  z-index: 1000;
+  left: 50px; bottom: 14px;
+  width: 600px; height: auto;
+  pointer-events: none;
 }
 
 #galerie {
   left: 151px; bottom: 190px;
 }
 
+.peopleContainer {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+}
+
+.peopleContainer > img {
+  /*
+  transform-origin: left bottom;
+  transform: scale(0.5);
+  */
+  position: absolute;
+  height: auto;
+  cursor: pointer;
+}
+
+#p27 { width: 170px; left: 110px; bottom: 73px;}
+#p40 { width: 143px; left: 437px; bottom: 67px;}
 
 
 
