@@ -20,6 +20,15 @@ function run (data) {
 
   _(data).filter(d => d.z !== 0).orderBy("z").forEach((d, i, j) => {
 
+  console.log(d);
+
+
+
+    // window.setTimeout(function () {
+    //   $("<img style='z-index: " + (data.length - d.z) + "; width: " + (d.w / 2) + "px; height: auto; left:" + (d.x  / 2) + "px; bottom:" + (d.y / 2) + "px;' src='img/people/" + d.id + ".png' alt=''>").appendTo(".peopleContainer");
+    // }, 50 * i);
+
+
     window.setTimeout(function () {
       var $el = $("<img style='z-index: " + (data.length - d.z) + "; width: " + (d.w / 2) + "px; height: auto; left:" + (d.x  / 2) + "px; bottom:" + (d.y / 2) + "px;' class='animated flipInX' src='img/people/" + d.id + ".png' alt=''>").appendTo(".peopleContainer");
       if (i + 1 === j.length) {
@@ -27,7 +36,8 @@ function run (data) {
           $(".peopleContainer img").removeClass("flipInX");
         });
       }
-    }, 200 * i);
+    }, 100 * i);
+
   });
 
 

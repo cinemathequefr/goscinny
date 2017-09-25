@@ -1,6 +1,7 @@
 body {
   overflow: hidden;
-  background-color: #ff0;
+  /*background-color: #ff0;*/
+  background-color: #369;
 }
 
 svg {
@@ -19,6 +20,7 @@ svg path {
   position: absolute;
   top: 0; bottom: 0; 
   left: calc(50vw - 350px); width: 700px;
+  /*outline: solid 1px red;*/
   /*left: calc(50vw - 500px); width: 1000px;*/
 }
 

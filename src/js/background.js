@@ -10,7 +10,7 @@ function init (count) {
     .append("svg")
     .append("g")
     .append("g")
-    .classed("rotate", true);
+    .classed("rotate stop", true);
 
   bg.selectAll("path").data(new Array(count)).enter().append("path").attr("d", function (i, j, k) {
     var a = (2 * Math.PI) / count;
