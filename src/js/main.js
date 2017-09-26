@@ -2,7 +2,7 @@ import route from "riot-route";
 import background from "./background.js";
 
 
-var peopleAnimation = "jello";
+var peopleAnimation = "zoomIn";
 // var peopleAnimation = "flipInX";
 
 $(() => {
@@ -30,25 +30,25 @@ function run (data) {
 
 
     window.setTimeout(function () {
-      var $el = $("<img style='z-index: " + (data.length - d.z) + "; width: " + (d.w / 2) + "px; height: auto; left:" + (d.x  / 2) + "px; bottom:" + (d.y / 2) + "px;' class='animated flipInX' src='img/people/" + d.id + ".png' alt=''>").appendTo(".peopleContainer");
+      var $el = $("<img style='z-index: " + (data.length - d.z) + "; width: " + (d.w / 2) + "px; height: auto; left:" + (d.x  / 2) + "px; bottom:" + (d.y / 2) + "px;' class='animated bounceIn' src='img/people/" + d.id + ".png' alt=''>").appendTo(".peopleContainer");
       if (i + 1 === j.length) {
         $el.on("animationend", () => {
-          $(".peopleContainer img").removeClass("flipInX");
+          $(".peopleContainer img").removeClass("bounceIn");
         });
       }
-    }, 100 * i);
+    }, 50 * i);
 
   });
 
 
 
-  $(".peopleContainer").on("animationend", "img", e => {
-    $(e.target).removeClass(peopleAnimation);
-  });
+  // $(".peopleContainer").on("animationend", "img", e => {
+  //   $(e.target).removeClass(peopleAnimation);
+  // });
 
-  $(".peopleContainer").on("mouseover", "img", e => {
-    $(e.target).addClass(peopleAnimation);
-  });
+  // $(".peopleContainer").on("mouseover", "img", e => {
+  //   $(e.target).addClass(peopleAnimation);
+  // });
 
 
   // Routing

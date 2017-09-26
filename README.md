@@ -38,60 +38,19 @@ Site pour l'exposition Goscinny &amp; le cinéma à la Cinémathèque française
 30. Jamel Debouzze
 31. Pierre Étaix
 32. Yves Robert
+33. Bourvil
+34. Colette Brosset
+35. Roger Pierre
+36. Gérard Calvi
+37. Jean-Marc Thibault
+38. Jean Dujardin
+39. Rosy Varte
+40. Terry Gilliam
+41. Roger Carel
+42. Éric
+43. Ramzy
+44. Pierre Tornade
+45. Harvey Kurtzman
+46. Gotlib
 
-
---- OLD ---
-
-(Rang) Id - Nom
-
-* (1) 40 - Jean Yanne
-* (2) 28 - Patrice Leconte
-* (3) 2 - Alexandre Astier
-* (4) ? - Laurel
-* (5) ? - Hardy
-* (6) 20 - Louis de Funès
-* (7) 37 - Pierre Tchernia
-* (8) 10 - Micheline Dax
-* (9) 9 - Pierre Dac
-* (10) 29 - Valérie Lemercier
-* (11) 35 - Jean Rochefort
-* (12) 32 - Jean Poiret
-* (13) 19 - John Ford
-* (14) 4 - Édouard Baer
-* (15) 33 - Daniel Prévost
-* (16) Woody Allen
-* (16) 14 - Pierre Desproges
-* (17) 36 - Michel Serrault
-* (18) Boby Lapointe
-* () Michel Hazanavicius
-* () Gérard Depardieu
-* () Robert Dhéry
-* () Michel Galabru
-* () Alain Chabat
-* () Gotlib
-* () Marx Brothers
-* () Michaël Youn
-* () Walt Disney
-* () Jamel Debouzze
-* () Jean Dujardin
-* () Pierre Étaix
-* () Bourvil
-* () Rosy Varte
-* () Roger Pierre
-* () Jean-Marc Thibault
-* () Colette Brosset
-* () Gérard Calvi
-* () Éric
-* () Ramzy
-* () Harvey Kurtzman
-* () Yves Robert
-* () Terry Gilliam
-* () Pierre Tornade
-
-
-* () Tex Avery
-
-
-
-
-
++ Tex Avery
