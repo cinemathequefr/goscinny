@@ -20,8 +20,6 @@ function run (data) {
 
   _(data).filter(d => d.z !== 0).orderBy("z").forEach((d, i, j) => {
 
-
-
     // window.setTimeout(function () {
     //   $("<img style='z-index: " + (data.length - d.z) + "; width: " + (d.w / 2) + "px; height: auto; left:" + (d.x  / 2) + "px; bottom:" + (d.y / 2) + "px;' src='img/people/" + d.id + ".png' alt=''>").appendTo(".peopleContainer");
     // }, 50 * i);
@@ -30,7 +28,6 @@ function run (data) {
     window.setTimeout(function () {
       var $el = $("<img data-id='" + d.id + "' style='z-index: " + (data.length - d.z) + "; width: " + (d.w / 2) + "px; height: auto; left:" + (d.x  / 2) + "px; bottom:" + (d.y / 2) + "px;' class='animated bounceIn' src='img/people/" + d.id + ".png' alt=''>").appendTo(".peopleContainer");
 
-      d3.select(".shapesContainer").datum(d).append("path").attr("d", d.path).attr("data-id", d.id);
 
 
       if (i + 1 === j.length) {
@@ -38,24 +35,46 @@ function run (data) {
           $(".peopleContainer img").removeClass("bounceIn");
         });
       }
-    }, 50 * i);
+    }, 20 * i);
   });
 
+
+  // Silhouettes
+  _(data).filter(d => d.path).orderBy("z").reverse().forEach((d, i, j) => {
+    d3.select(".shapesContainer").datum(d).append("path").attr("d", d.path).attr("data-name", d.name).attr("data-id", d.id);
+  });
 
   $(".shapesContainer").on("mouseenter", "path", e => {
-    var id = $(e.target).data("id");
-    $(".peopleContainer img[data-id='" + id + "']").addClass(peopleAnimation);
+    var $elem = $(e.target);
+    $(".info").html($elem.data("name"));
+
+    $elem.one("mouseleave", f => { $(".info").html(""); });
+
   });
 
 
-  $(".peopleContainer").on("animationend", "img", e => {
-    $(e.target).removeClass(peopleAnimation);
-  });
 
 
-  // $(".peopleContainer").on("mouseover", "img", e => {
-  //   $(e.target).addClass(peopleAnimation);
+
+
+  // $(".shapesContainer").on("mouseenter", "path", e => {
+  //   var id = $(e.target).data("id");
+  //   $(".peopleContainer img[data-id='" + id + "']").addClass("blowup");
+  //   // $(e.target).addClass("blowup");
+
+  //   $(e.target).one("mouseleave", f => {
+  //     window.setTimeout(() => {
+  //       $(".peopleContainer img[data-id='" + id + "']").removeClass("blowup");
+  //       // $(e.target).removeClass("blowup");
+  //     }, 100);
+  //   });
   // });
+
+
+  // $(".peopleContainer").on("animationend", "img", e => {
+  //   $(e.target).removeClass(peopleAnimation);
+  // });
+
 
 
   // Routing

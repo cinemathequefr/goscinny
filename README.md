@@ -28,6 +28,7 @@ Site pour l'exposition Goscinny &amp; le cinéma à la Cinémathèque française
 20. Michel Hazanavicius
 21. Gérard Depardieu
 22. Robert Dhéry
+
 23. Michel Galabru
 24. Alain Chabat
 25. Harpo Marx
@@ -52,5 +53,9 @@ Site pour l'exposition Goscinny &amp; le cinéma à la Cinémathèque française
 44. Pierre Tornade
 45. Harvey Kurtzman
 46. Gotlib
+47. Roger Carel
+48. Jean-Jacques Sempé
+49. Jean Tabary
+50. Morris
 
 + Tex Avery

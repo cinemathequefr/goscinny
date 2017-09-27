@@ -50,29 +50,42 @@ body {
 
 svg.shapesContainer path {
   fill: transparent;
-  /*stroke: red;*/
-  /*transition: 0.25s;*/
   cursor: pointer;
+  transition: 0.2s;
+  /*stroke: red;*/
+  /*transform-origin: center 70%;*/
 }
 
-/*svg.shapesContainer path:hover {
-  fill: #f96;
-  opacity: 0.85;
+svg.shapesContainer path:hover {
+  /*fill: #f96;*/
+  stroke: red;
+  stroke-width: 4px;
+
 }
-*/
+
 
 .peopleContainer > img {
   /*
   transform-origin: left bottom;
   transform: scale(0.5);
   */
+  transform-origin: center 70%;
   position: absolute;
   height: auto;
   cursor: pointer;
+  transition: 0.1s;
+
 }
 
+.blowup {
+  transform: scale(1.5);
+}
+
+/*
 #p27 { width: 170px; left: 110px; bottom: 73px;}
 #p40 { width: 143px; left: 437px; bottom: 67px;}
+*/
+
 
 
 
