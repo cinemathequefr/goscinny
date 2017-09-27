@@ -2,7 +2,7 @@ import route from "riot-route";
 import background from "./background.js";
 
 
-var peopleAnimation = "zoomIn";
+var peopleAnimation = "flip";
 // var peopleAnimation = "flipInX";
 
 $(() => {
@@ -20,8 +20,6 @@ function run (data) {
 
   _(data).filter(d => d.z !== 0).orderBy("z").forEach((d, i, j) => {
 
-  console.log(d);
-
 
 
     // window.setTimeout(function () {
@@ -30,21 +28,30 @@ function run (data) {
 
 
     window.setTimeout(function () {
-      var $el = $("<img style='z-index: " + (data.length - d.z) + "; width: " + (d.w / 2) + "px; height: auto; left:" + (d.x  / 2) + "px; bottom:" + (d.y / 2) + "px;' class='animated bounceIn' src='img/people/" + d.id + ".png' alt=''>").appendTo(".peopleContainer");
+      var $el = $("<img data-id='" + d.id + "' style='z-index: " + (data.length - d.z) + "; width: " + (d.w / 2) + "px; height: auto; left:" + (d.x  / 2) + "px; bottom:" + (d.y / 2) + "px;' class='animated bounceIn' src='img/people/" + d.id + ".png' alt=''>").appendTo(".peopleContainer");
+
+      d3.select(".shapesContainer").datum(d).append("path").attr("d", d.path).attr("data-id", d.id);
+
+
       if (i + 1 === j.length) {
         $el.on("animationend", () => {
           $(".peopleContainer img").removeClass("bounceIn");
         });
       }
     }, 50 * i);
-
   });
 
 
+  $(".shapesContainer").on("mouseenter", "path", e => {
+    var id = $(e.target).data("id");
+    $(".peopleContainer img[data-id='" + id + "']").addClass(peopleAnimation);
+  });
 
-  // $(".peopleContainer").on("animationend", "img", e => {
-  //   $(e.target).removeClass(peopleAnimation);
-  // });
+
+  $(".peopleContainer").on("animationend", "img", e => {
+    $(e.target).removeClass(peopleAnimation);
+  });
+
 
   // $(".peopleContainer").on("mouseover", "img", e => {
   //   $(e.target).addClass(peopleAnimation);

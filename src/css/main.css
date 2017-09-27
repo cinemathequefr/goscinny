@@ -1,15 +1,16 @@
 body {
   overflow: hidden;
-  /*background-color: #ff0;*/
-  background-color: #369;
+  background-color: #ff0;
+  /*background-color: #369;*/
 }
 
-svg {
+
+.backgroundContainer svg {
   background-color: #ff0;
   transition: 0.5s;
 }
 
-svg path {
+.backgroundContainer svg path {
   stroke-width: 0;
   fill: #f30;
 }
@@ -44,10 +45,21 @@ svg path {
   left: 151px; bottom: 190px;
 }
 
-.peopleContainer {
-  position: absolute;
-  top: 0; right: 0; bottom: 0; left: 0;
+.peopleContainer { position: absolute; z-index: 1; top: 0; right: 0; bottom: 0; left: 0; }
+.shapesContainer { position: absolute; z-index: 2; right: 0; bottom: 0; left: 0; }
+
+svg.shapesContainer path {
+  fill: transparent;
+  /*stroke: red;*/
+  /*transition: 0.25s;*/
+  cursor: pointer;
 }
+
+/*svg.shapesContainer path:hover {
+  fill: #f96;
+  opacity: 0.85;
+}
+*/
 
 .peopleContainer > img {
   /*
