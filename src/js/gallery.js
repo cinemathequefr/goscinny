@@ -3,7 +3,8 @@
 
 
 
-var queue = new createjs.LoadQueue(true); // http://www.createjs.com/Docs/PreloadJS/classes/LoadQueue.html
+// var queue = new createjs.LoadQueue(true); // http://www.createjs.com/Docs/PreloadJS/classes/LoadQueue.html
+var queue = new createjs.LoadQueue(false); // http://www.createjs.com/Docs/PreloadJS/classes/LoadQueue.html
 var isGalleryLoaded = false;
 var data;
 
