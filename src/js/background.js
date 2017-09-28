@@ -21,7 +21,7 @@ function init (count) {
   });
 
   resize();
-  rotate.start();
+  // rotate.start();
 }
 
 function resize () {
