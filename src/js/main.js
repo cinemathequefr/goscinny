@@ -35,7 +35,8 @@ function run (data) {
           $(".peopleContainer img").removeClass("bounceIn");
         });
       }
-    }, 20 * i);
+    }, 30 * i);
+
   });
 
 
