@@ -11,7 +11,7 @@ var data;
 function init (_data) {
   data = _data;
 
-  var files = _(data).sortBy("z").map(d => "../img/people/" + d.id + ".jpg").value();
+  var files = _(data).sortBy("z").map(d => "img/people/" + d.id + ".png").value();
 
   queue.setMaxConnections(10);
   queue.loadManifest(files);
