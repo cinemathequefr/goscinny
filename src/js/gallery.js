@@ -1,27 +1,85 @@
-
-
-
-
-
-// var queue = new createjs.LoadQueue(true); // http://www.createjs.com/Docs/PreloadJS/classes/LoadQueue.html
-var queue = new createjs.LoadQueue(false); // http://www.createjs.com/Docs/PreloadJS/classes/LoadQueue.html
 var isGalleryLoaded = false;
 var data;
+var q = new createjs.LoadQueue(true); // http://www.createjs.com/Docs/PreloadJS/classes/LoadQueue.html
+
+q.setMaxConnections(8);
+
 
 
 function init (_data) {
   data = _data;
+  var files = _(data).sortBy("z").map(d => ({ id: d.id, src: "img/people/" + d.id + ".png" })).value();
+  q.loadManifest(files);
 
-  var files = _(data).sortBy("z").map(d => "img/people/" + d.id + ".png").value();
+  return new Promise((resolve, reject) => {
+    q.on("complete", e => {
+      isGalleryLoaded = true;
+      var images = q.getItems();
 
-  queue.setMaxConnections(10);
-  queue.loadManifest(files);
-  queue.on("progress", e => { $.publish("gallery.progress", e.progress); });
-  queue.on("complete", e => {
+      data = _(images).sortBy("item.id").zipWith(
+        data,
+        (i, d) =>  _(d).assign({ img: i.result }).value()
+      ).value();
+
+      _(data).orderBy("z").forEach((d, i, j) => {
+        window.setTimeout(() => {
+          $(d.img)
+          .attr("data-id", d.id)
+          .attr("style", "z-index: " + (data.length - d.z) + "; width: " + (d.w / 2) + "px; height: auto; left:" + (d.x  / 2) + "px; bottom:" + (d.y / 2) + "px;")
+          .addClass("animated")
+          .addClass("bounceIn")
+          .appendTo(".peopleContainer");
+
+          if (i + 1 === j.length) { resolve(); }
+
+        }, 35 * i);
+      });
+    });
+
+  });
+
+
+}
+
+
+
+
+// OK
+/*
+function init (_data) {
+  data = _data;
+  var files = _(data).sortBy("z").map(d => ({ id: d.id, src: "img/people/" + d.id + ".png" })).value();
+
+  q.loadManifest(files);
+
+  q.on("complete", e => {
     isGalleryLoaded = true;
-    $.publish("gallery.complete");
+    var images = q.getItems();
+
+    data = _(images).sortBy("item.id").zipWith(
+      data,
+      (i, d) =>  _(d).assign({ img: i.result }).value()
+    ).value();
+
+    _(data).orderBy("z").forEach((d, i, j) => {
+      window.setTimeout(() => {
+        $(d.img)
+        .attr("data-id", d.id)
+        .attr("style", "z-index: " + (data.length - d.z) + "; width: " + (d.w / 2) + "px; height: auto; left:" + (d.x  / 2) + "px; bottom:" + (d.y / 2) + "px;")
+        .addClass("animated")
+        .addClass("bounceIn")
+        .appendTo(".peopleContainer");
+
+        if (i + 1 === j.length) { alert("Done"); }
+
+      }, 50 * i);
+    });
   });
 }
+*/
+
+
+
 
 
 function off (event, callback) {
@@ -41,9 +99,18 @@ function one (event, callback) {
   });
 }
 
+
 function display () {
   if (!isGalleryLoaded) return;
 
+
+
+}
+
+
+/*
+function display () {
+  if (!isGalleryLoaded) return;
   _(data).filter(d => d.z !== 0).orderBy("z").forEach((d, i, j) => {
     window.setTimeout(function () {
       var $el = $("<img data-id='" + d.id + "' style='z-index: " + (data.length - d.z) + "; width: " + (d.w / 2) + "px; height: auto; left:" + (d.x  / 2) + "px; bottom:" + (d.y / 2) + "px;' class='animated bounceIn' src='img/people/" + d.id + ".png' alt=''>").appendTo(".peopleContainer");
@@ -67,11 +134,8 @@ function display () {
 
     $elem.one("mouseleave", f => { $(".info").html(""); });
   });
-
-
-
 }
-
+*/
 
 
 
