@@ -30,7 +30,22 @@ function init (_data) {
           .addClass("bounceIn")
           .appendTo(".peopleContainer");
 
-          if (i + 1 === j.length) { resolve(); }
+          if (i + 1 === j.length) {
+
+            // Silhouettes
+            _(data).filter(d => d.path).orderBy("z").reverse().forEach((d, i, j) => {
+              d3.select(".shapesContainer").datum(d).append("path").attr("d", d.path).attr("data-name", d.name).attr("data-id", d.id);
+            });
+
+            $(".shapesContainer").on("mouseenter", "path", e => {
+              var $elem = $(e.target);
+              $(".info").html($elem.data("name"));
+
+              $elem.one("mouseleave", f => { $(".info").html(""); });
+            });
+
+            resolve();
+          }
 
         }, 35 * i);
       });

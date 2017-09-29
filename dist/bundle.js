@@ -79,7 +79,22 @@ function init$1 (_data) {
           .addClass("bounceIn")
           .appendTo(".peopleContainer");
 
-          if (i + 1 === j.length) { resolve(); }
+          if (i + 1 === j.length) {
+
+            // Silhouettes
+            _(data).filter(function (d) { return d.path; }).orderBy("z").reverse().forEach(function (d, i, j) {
+              d3.select(".shapesContainer").datum(d).append("path").attr("d", d.path).attr("data-name", d.name).attr("data-id", d.id);
+            });
+
+            $(".shapesContainer").on("mouseenter", "path", function (e) {
+              var $elem = $(e.target);
+              $(".info").html($elem.data("name"));
+
+              $elem.one("mouseleave", function (f) { $(".info").html(""); });
+            });
+
+            resolve();
+          }
 
         }, 35 * i);
       });
