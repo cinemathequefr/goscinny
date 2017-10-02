@@ -1,51 +1,67 @@
-import background from "./background.js";
-import gallery from "./gallery.js";
+import background from "./modules/background.js";
+import gallery from "./modules/gallery.js";
+
+window.scale = 0.5;
 
 var q = new createjs.LoadQueue(true);
 q.setMaxConnections(8);
 
-if (!window.Promise) { // Conditionally loads Promise polyfill (see: https://philipwalton.com/articles/loading-polyfills-only-when-needed/)
-  q.loadFile("dist/vendor/es6-promise.min.js");
-  q.on("complete", () => {
-    window.Promise = ES6Promise;
-    $(main);
-  });
-  q.on("error", err => { console.log("Erreur de chargement de script"); });
-} else {
-  $(main);
-}
+$(main);
+// if (!window.Promise) { // Conditionally loads Promise polyfill (see: https://philipwalton.com/articles/loading-polyfills-only-when-needed/)
+//   q.loadFile("dist/vendor/es6-promise.min.js");
+//   q.on("complete", () => {
+//     window.Promise = ES6Promise;
+//     $(main);
+//   });
+//   q.on("error", err => { console.log("Erreur de chargement de script"); });
+// } else {
+//   $(main);
+// }
 
 function main () {
-  var data;
+  var data, p;
 
-  q.removeAll();
-  q.loadManifest(["data/data.json", "img/studio.png"]);
-  new Promise((resolve, reject) => {
-    q.on("complete", () => { resolve(q.getItems()); });
-    q.on("error", () => { reject("Erreur de chargement des données."); });
+  background.init();
+  background.rotate.start();
+
+  preloadWithPromise(q, ["img/studio.png", "img/rg.png", "data/data.json"])
+  .then(d => {
+    $(d[0].result).attr("id", "studio").appendTo(".main");
+    $(d[1].result)
+      .attr("id", "rg")
+      .attr("class", "animated bounce infinite")
+      .css({
+        left: (470 * scale) + "px",
+        bottom: (-60 * scale) + "px",
+        width: (500 * scale) + "px",
+        height: (530 * scale) + "px" })
+      .appendTo(".main");
+
+    data = d[2].result;
+
+    p = gallery.init(data);
+    gallery.on("gallery.progress", (e, i) => { $(".info").html(Math.round(i * 100) + "%"); });
+    return p;
   })
-  .then(items => { // NOTE: data.json et studio.png sont chargés
-    data = _(items).find(i => i.item.id === "data/data.json").result;
-
-    background.init();
-    background.rotate.start();
-    $("#studio").show();
-
-    q.removeAll();
-
-    gallery.init(data).then(background.rotate.stop);
-
-    // gallery.init(data).then(d => { console.log(d); });
-
-
-
-
+  .then(() => {
+    window.setTimeout(() => {
+      background.rotate.stop();
+      $("#rg").removeClass("bounce");
+    }, 2000);
   })
   .catch(reason => { console.error(reason); });
+
 }
 
 
-
+function preloadWithPromise (queue, manifest, doRemoveAll) {
+  if (!!doRemoveAll) queue.removeAll();
+  queue.loadManifest(manifest);
+  return new Promise((resolve, reject) => {
+    queue.on("complete", () => { resolve(queue.getItems()); });
+    queue.on("error", () => { reject("Erreur de chargement."); });
+  });
+}
 
 
 

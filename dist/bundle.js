@@ -54,11 +54,13 @@ var q$1 = new createjs.LoadQueue(true); // http://www.createjs.com/Docs/PreloadJ
 q$1.setMaxConnections(8);
 
 
-
+// Initialise
 function init$1 (_data) {
   data = _data;
   var files = _(data).sortBy("z").map(function (d) { return ({ id: d.id, src: "img/people/" + d.id + ".png" }); }).value();
   q$1.loadManifest(files);
+
+  q$1.on("progress", function (e) { $.publish("gallery.progress", e.progress); }); // NB: le suivi de progress ne peut pas utiliser de promise, on utilise pub/sub
 
   return new Promise(function (resolve, reject) {
     q$1.on("complete", function (e) {
@@ -101,12 +103,7 @@ function init$1 (_data) {
     });
 
   });
-
-
 }
-
-
-
 
 function on (event, callback) {
   $.subscribe(event, callback);
@@ -120,48 +117,10 @@ function display () {
 
 }
 
-
-/*
-function display () {
-  if (!isGalleryLoaded) return;
-  _(data).filter(d => d.z !== 0).orderBy("z").forEach((d, i, j) => {
-    window.setTimeout(function () {
-      var $el = $("<img data-id='" + d.id + "' style='z-index: " + (data.length - d.z) + "; width: " + (d.w / 2) + "px; height: auto; left:" + (d.x  / 2) + "px; bottom:" + (d.y / 2) + "px;' class='animated bounceIn' src='img/people/" + d.id + ".png' alt=''>").appendTo(".peopleContainer");
-      if (i + 1 === j.length) {
-        $el.on("animationend", () => {
-          $(".peopleContainer img").removeClass("bounceIn");
-        });
-      }
-    }, 30 * i);
-  });
-
-
-  // Silhouettes
-  _(data).filter(d => d.path).orderBy("z").reverse().forEach((d, i, j) => {
-    d3.select(".shapesContainer").datum(d).append("path").attr("d", d.path).attr("data-name", d.name).attr("data-id", d.id);
-  });
-
-  $(".shapesContainer").on("mouseenter", "path", e => {
-    var $elem = $(e.target);
-    $(".info").html($elem.data("name"));
-
-    $elem.one("mouseleave", f => { $(".info").html(""); });
-  });
-}
-*/
-
-
-
-
 /*! Tiny Pub/Sub - v0.7.0 - 2013-01-29
  * https://github.com/cowboy/jquery-tiny-pubsub
  * Copyright (c) 2013 "Cowboy" Ben Alman; Licensed MIT */
 (function(n){var u=n({});n.subscribe=function(){u.on.apply(u,arguments);},n.unsubscribe=function(){u.off.apply(u,arguments);},n.publish=function(){u.trigger.apply(u,arguments);};})(jQuery);
-
-
-
-
-
 
 var gallery = {
   init: init$1,
@@ -169,51 +128,67 @@ var gallery = {
   on: on
 };
 
+window.scale = 0.5;
+
 var q = new createjs.LoadQueue(true);
 q.setMaxConnections(8);
 
-if (!window.Promise) { // Conditionally loads Promise polyfill (see: https://philipwalton.com/articles/loading-polyfills-only-when-needed/)
-  q.loadFile("dist/vendor/es6-promise.min.js");
-  q.on("complete", function () {
-    window.Promise = ES6Promise;
-    $(main);
-  });
-  q.on("error", function (err) { console.log("Erreur de chargement de script"); });
-} else {
-  $(main);
-}
+$(main);
+// if (!window.Promise) { // Conditionally loads Promise polyfill (see: https://philipwalton.com/articles/loading-polyfills-only-when-needed/)
+//   q.loadFile("dist/vendor/es6-promise.min.js");
+//   q.on("complete", () => {
+//     window.Promise = ES6Promise;
+//     $(main);
+//   });
+//   q.on("error", err => { console.log("Erreur de chargement de script"); });
+// } else {
+//   $(main);
+// }
 
 function main () {
-  var data;
+  var data, p;
 
-  q.removeAll();
-  q.loadManifest(["data/data.json", "img/studio.png"]);
-  new Promise(function (resolve, reject) {
-    q.on("complete", function () { resolve(q.getItems()); });
-    q.on("error", function () { reject("Erreur de chargement des données."); });
+  background.init();
+  background.rotate.start();
+
+  preloadWithPromise(q, ["img/studio.png", "img/rg.png", "data/data.json"])
+  .then(function (d) {
+    $(d[0].result).attr("id", "studio").appendTo(".main");
+    $(d[1].result)
+      .attr("id", "rg")
+      .attr("class", "animated bounce infinite")
+      .css({
+        left: (470 * scale) + "px",
+        bottom: (-60 * scale) + "px",
+        width: (500 * scale) + "px",
+        height: (530 * scale) + "px" })
+      .appendTo(".main");
+
+    data = d[2].result;
+
+    p = gallery.init(data);
+    gallery.on("gallery.progress", function (e, i) { $(".info").html(Math.round(i * 100) + "%"); });
+    return p;
   })
-  .then(function (items) { // NOTE: data.json et studio.png sont chargés
-    data = _(items).find(function (i) { return i.item.id === "data/data.json"; }).result;
-
-    background.init();
-    background.rotate.start();
-    $("#studio").show();
-
-    q.removeAll();
-
-    gallery.init(data).then(background.rotate.stop);
-
-    // gallery.init(data).then(d => { console.log(d); });
-
-
-
-
+  .then(function () {
+    window.setTimeout(function () {
+      background.rotate.stop();
+      $("#rg").removeClass("bounce");
+    }, 2000);
   })
   .catch(function (reason) { console.error(reason); });
+
 }
 
 
-
+function preloadWithPromise (queue, manifest, doRemoveAll) {
+  if (!!doRemoveAll) { queue.removeAll(); }
+  queue.loadManifest(manifest);
+  return new Promise(function (resolve, reject) {
+    queue.on("complete", function () { resolve(queue.getItems()); });
+    queue.on("error", function () { reject("Erreur de chargement."); });
+  });
+}
 
 
 

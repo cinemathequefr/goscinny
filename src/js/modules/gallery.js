@@ -2,20 +2,12 @@ var isGalleryLoaded = false;
 var data;
 var q = new createjs.LoadQueue(true); // http://www.createjs.com/Docs/PreloadJS/classes/LoadQueue.html
 
-var s = window.scale;
-
 q.setMaxConnections(8);
-
 
 
 // Initialise
 function init (_data) {
-
-
-
-
   data = _data;
-
   var files = _(data).sortBy("z").map(d => ({ id: d.id, src: "img/people/" + d.id + ".png" })).value();
   q.loadManifest(files);
 
@@ -32,18 +24,10 @@ function init (_data) {
       ).value();
 
       _(data).orderBy("z").forEach((d, i, j) => {
-        console.log(d);
         window.setTimeout(() => {
           $(d.img)
           .attr("data-id", d.id)
-          .css({
-            zIndex: (data.length - d.z),
-            width: (d.w * s) + "px",
-            height: "auto",
-            left: (d.x  * s) + "px",
-            bottom: (d.y * s) + "px"
-          })
-          // .attr("style", "z-index: " + (data.length - d.z) + "; width: " + (d.w * s) + "px; height: auto; left:" + (d.x  * s) + "px; bottom:" + (d.y * s) + "px;")
+          .attr("style", "z-index: " + (data.length - d.z) + "; width: " + (d.w / 2) + "px; height: auto; left:" + (d.x  / 2) + "px; bottom:" + (d.y / 2) + "px;")
           .addClass("animated")
           .addClass("bounceIn")
           .appendTo(".peopleContainer");
