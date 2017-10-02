@@ -1,7 +1,7 @@
 (function () {
 'use strict';
 
-var arc = d3.arc().innerRadius(50).outerRadius(2000);
+var arc = d3.arc().innerRadius(5).outerRadius(2000);
 var bg;
 var rotate;
 
@@ -24,7 +24,6 @@ function init (count) {
   });
 
   resize();
-  // rotate.start();
 }
 
 function resize () {
