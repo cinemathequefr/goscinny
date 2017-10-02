@@ -151,10 +151,17 @@ function display () {
               d3.select(".shapesContainer").datum(d).append("path").attr("d", d.path).attr("data-name", d.name).attr("data-id", d.id);
             });
 
-            $(".shapesContainer").on("mouseenter", "path", function (e) {
-              var $elem = $(e.target);
-              $(".info").html($elem.data("name"));
-              $elem.one("mouseleave", function (f) { $(".info").html(""); });
+            // $(".shapesContainer").on("mouseenter", "path", e => {
+            //   var $elem = $(e.target);
+            //   $(".info").html($elem.data("name"));
+            //   $elem.one("mouseleave", f => { $(".info").html(""); });
+            // });
+            $(".shapesContainer").one("mouseenter", "path", function (e) {
+              mouseenter(e);
+              $.publish("gallery.firstMouseenter");
+              $(".shapesContainer").on("mouseenter", "path", function (e) {
+                mouseenter(e);
+              });
             });
 
             $(d.img).on("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", resolve);
@@ -164,6 +171,14 @@ function display () {
     }
   });
 }
+
+
+function mouseenter (e) {
+  var $elem = $(e.target);
+  $(".info").html($elem.data("name"));
+  $elem.one("mouseleave", function (f) { $(".info").html(""); });
+}
+
 
 
 function on (event, callback) {
@@ -258,10 +273,9 @@ function main () {
   .then(function () { return delayPromise(2000); })
   .then(function () {
     $("#rg").removeClass("bounce");
+    gallery.on("gallery.firstMouseenter", background.rotate.stop);
     return gallery.display();
   })
-  .then(function () { return delayPromise(2000); })
-  .then(background.rotate.stop)
   .catch(function (reason) { console.error(reason); });
 
 }

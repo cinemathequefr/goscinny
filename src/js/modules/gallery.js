@@ -103,10 +103,17 @@ function display () {
               d3.select(".shapesContainer").datum(d).append("path").attr("d", d.path).attr("data-name", d.name).attr("data-id", d.id);
             });
 
-            $(".shapesContainer").on("mouseenter", "path", e => {
-              var $elem = $(e.target);
-              $(".info").html($elem.data("name"));
-              $elem.one("mouseleave", f => { $(".info").html(""); });
+            // $(".shapesContainer").on("mouseenter", "path", e => {
+            //   var $elem = $(e.target);
+            //   $(".info").html($elem.data("name"));
+            //   $elem.one("mouseleave", f => { $(".info").html(""); });
+            // });
+            $(".shapesContainer").one("mouseenter", "path", e => {
+              mouseenter(e);
+              $.publish("gallery.firstMouseenter");
+              $(".shapesContainer").on("mouseenter", "path", e => {
+                mouseenter(e);
+              });
             });
 
             $(d.img).on("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", resolve);
@@ -116,6 +123,14 @@ function display () {
     }
   });
 }
+
+
+function mouseenter (e) {
+  var $elem = $(e.target);
+  $(".info").html($elem.data("name"));
+  $elem.one("mouseleave", f => { $(".info").html(""); });
+}
+
 
 
 function off (event, callback) {

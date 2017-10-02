@@ -67,10 +67,9 @@ function main () {
   .then(() => delayPromise(2000))
   .then(() => {
     $("#rg").removeClass("bounce");
+    gallery.on("gallery.firstMouseenter", background.rotate.stop);
     return gallery.display();
   })
-  .then(() => delayPromise(2000))
-  .then(background.rotate.stop)
   .catch(reason => { console.error(reason); });
 
 }
