@@ -5,10 +5,15 @@ body {
 }
 
 
+.backgroundContainer {
+  display: none;
+}
+
+/*
 .backgroundContainer svg {
   background-color: #ff0;
-  transition: 0.5s;
 }
+*/
 
 .backgroundContainer svg path {
   stroke-width: 0;

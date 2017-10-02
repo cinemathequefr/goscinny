@@ -248,6 +248,8 @@ function main () {
         height: (530 * scale) + "px" })
       .appendTo(".main");
 
+    $(".backgroundContainer").show();
+
     data = d[2].result;
 
     p = gallery.init(data);
