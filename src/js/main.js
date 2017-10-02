@@ -41,7 +41,7 @@ function main () {
   var data, p;
 
   background.init();
-  background.rotate.start();
+  // background.rotate.start();
 
   preloadWithPromise(q, ["img/studio.png", "img/rg.png", "data/data.json"])
   .then(d => {

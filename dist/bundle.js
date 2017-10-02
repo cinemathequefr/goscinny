@@ -151,14 +151,9 @@ function display () {
               d3.select(".shapesContainer").datum(d).append("path").attr("d", d.path).attr("data-name", d.name).attr("data-id", d.id);
             });
 
-            // $(".shapesContainer").on("mouseenter", "path", e => {
-            //   var $elem = $(e.target);
-            //   $(".info").html($elem.data("name"));
-            //   $elem.one("mouseleave", f => { $(".info").html(""); });
-            // });
             $(".shapesContainer").one("mouseenter", "path", function (e) {
               mouseenter(e);
-              $.publish("gallery.firstMouseenter");
+              $.publish("gallery.firstMouseenter"); // Au premier mouseenter, on arrête l'animation du background
               $(".shapesContainer").on("mouseenter", "path", function (e) {
                 mouseenter(e);
               });
@@ -166,7 +161,7 @@ function display () {
 
             $(d.img).on("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", resolve);
           }
-        }, 35 * i);
+        }, (35 * i) + (i + 1 === j.length ? 2000 : 0)); // Délai supplémentaire pour le dernier personnage
       });
     }
   });
@@ -247,7 +242,7 @@ function main () {
   var data, p;
 
   background.init();
-  background.rotate.start();
+  // background.rotate.start();
 
   preloadWithPromise(q, ["img/studio.png", "img/rg.png", "data/data.json"])
   .then(function (d) {
