@@ -2,21 +2,15 @@ var isGalleryLoaded = false;
 var data;
 var q = new createjs.LoadQueue(true); // http://www.createjs.com/Docs/PreloadJS/classes/LoadQueue.html
 
-var s = window.scale;
+var scale = 0.5; // TODO
 
 q.setMaxConnections(8);
 
-
-
 // Initialise
 function init (_data) {
-
-
-
-
   data = _data;
-
   var files = _(data).sortBy("z").map(d => ({ id: d.id, src: "img/people/" + d.id + ".png" })).value();
+
   q.loadManifest(files);
 
   q.on("progress", e => { $.publish("gallery.progress", e.progress); }); // NB: le suivi de progress ne peut pas utiliser de promise, on utilise pub/sub
@@ -32,16 +26,15 @@ function init (_data) {
       ).value();
 
       _(data).orderBy("z").forEach((d, i, j) => {
-        console.log(d);
         window.setTimeout(() => {
           $(d.img)
           .attr("data-id", d.id)
           .css({
             zIndex: (data.length - d.z),
-            width: (d.w * s) + "px",
+            width: (d.w * scale) + "px",
             height: "auto",
-            left: (d.x  * s) + "px",
-            bottom: (d.y * s) + "px"
+            left: (d.x  * scale) + "px",
+            bottom: (d.y * scale) + "px"
           })
           // .attr("style", "z-index: " + (data.length - d.z) + "; width: " + (d.w * s) + "px; height: auto; left:" + (d.x  * s) + "px; bottom:" + (d.y * s) + "px;")
           .addClass("animated")
@@ -92,10 +85,21 @@ function one (event, callback) {
 
 function display () {
   if (!isGalleryLoaded) return;
-
-
-
 }
+
+
+
+function preloadWithPromise (queue, manifest, doRemoveAll) {
+  if (!!doRemoveAll) queue.removeAll();
+  queue.loadManifest(manifest);
+  return new Promise((resolve, reject) => {
+    queue.on("complete", () => { resolve(queue.getItems()); });
+    queue.on("error", () => { reject("Erreur de chargement."); });
+  });
+}
+
+
+
 
 /*! Tiny Pub/Sub - v0.7.0 - 2013-01-29
  * https://github.com/cowboy/jquery-tiny-pubsub
@@ -104,6 +108,5 @@ function display () {
 
 export default {
   init: init,
-  display: display,
   on: on
 };

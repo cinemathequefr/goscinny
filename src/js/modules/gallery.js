@@ -1,6 +1,7 @@
 var isGalleryLoaded = false;
 var data;
 var q = new createjs.LoadQueue(true); // http://www.createjs.com/Docs/PreloadJS/classes/LoadQueue.html
+var scale = 0.5; // TODO
 
 q.setMaxConnections(8);
 
@@ -8,11 +9,23 @@ q.setMaxConnections(8);
 // Initialise
 function init (_data) {
   data = _data;
-  var files = _(data).sortBy("z").map(d => ({ id: d.id, src: "img/people/" + d.id + ".png" })).value();
-  q.loadManifest(files);
 
   q.on("progress", e => { $.publish("gallery.progress", e.progress); }); // NB: le suivi de progress ne peut pas utiliser de promise, on utilise pub/sub
 
+  return preloadWithPromise(
+    q,
+    _(data).sortBy("z").map(d => ({ id: d.id, src: "img/people/" + d.id + ".png" })).value()
+  )
+  .then(images => {
+    isGalleryLoaded = true;
+    data = _(images).sortBy("item.id").zipWith(
+      data,
+      (i, d) =>  _(d).assign({ img: i.result }).value()
+    ).value();
+  });
+
+
+/*
   return new Promise((resolve, reject) => {
     q.on("complete", e => {
       isGalleryLoaded = true;
@@ -27,7 +40,14 @@ function init (_data) {
         window.setTimeout(() => {
           $(d.img)
           .attr("data-id", d.id)
-          .attr("style", "z-index: " + (data.length - d.z) + "; width: " + (d.w / 2) + "px; height: auto; left:" + (d.x  / 2) + "px; bottom:" + (d.y / 2) + "px;")
+          .css({
+            zIndex: (data.length - d.z),
+            width: (d.w * scale) + "px",
+            height: "auto",
+            left: (d.x  * scale) + "px",
+            bottom: (d.y * scale) + "px"
+          })
+          // .attr("style", "z-index: " + (data.length - d.z) + "; width: " + (d.w * s) + "px; height: auto; left:" + (d.x  * s) + "px; bottom:" + (d.y * s) + "px;")
           .addClass("animated")
           .addClass("bounceIn")
           .appendTo(".peopleContainer");
@@ -52,9 +72,51 @@ function init (_data) {
         }, 35 * i);
       });
     });
+  });
+*/
 
+}
+
+
+function display () {
+  return new Promise((resolve, reject) => {
+    if (!isGalleryLoaded) {
+      reject("La galerie n'est pas encore chargée.");
+    } else {
+      _(data).orderBy("z").forEach((d, i, j) => {
+        window.setTimeout(() => {
+          $(d.img)
+          .attr("data-id", d.id)
+          .css({
+            zIndex: (data.length - d.z),
+            width: (d.w * scale) + "px",
+            height: "auto",
+            left: (d.x  * scale) + "px",
+            bottom: (d.y * scale) + "px"
+          })
+          .addClass("animated")
+          .addClass("bounceIn")
+          .appendTo(".peopleContainer");
+
+          if (i + 1 === j.length) {
+            _(data).filter(d => d.path).orderBy("z").reverse().forEach((d, i, j) => {
+              d3.select(".shapesContainer").datum(d).append("path").attr("d", d.path).attr("data-name", d.name).attr("data-id", d.id);
+            });
+
+            $(".shapesContainer").on("mouseenter", "path", e => {
+              var $elem = $(e.target);
+              $(".info").html($elem.data("name"));
+              $elem.one("mouseleave", f => { $(".info").html(""); });
+            });
+
+            $(d.img).on("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", resolve);
+          }
+        }, 35 * i);
+      });
+    }
   });
 }
+
 
 function off (event, callback) {
   $.unsubscribe(event, callback);
@@ -74,12 +136,15 @@ function one (event, callback) {
 }
 
 
-function display () {
-  if (!isGalleryLoaded) return;
-
-
-
+function preloadWithPromise (queue, manifest, doRemoveAll) { // NB : duplicated from main.js
+  if (!!doRemoveAll) queue.removeAll();
+  queue.loadManifest(manifest);
+  return new Promise((resolve, reject) => {
+    queue.on("complete", () => { resolve(queue.getItems()); });
+    queue.on("error", () => { reject("Erreur de chargement."); });
+  });
 }
+
 
 /*! Tiny Pub/Sub - v0.7.0 - 2013-01-29
  * https://github.com/cowboy/jquery-tiny-pubsub

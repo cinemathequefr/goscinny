@@ -50,6 +50,7 @@ var background = {
 var isGalleryLoaded = false;
 var data;
 var q$1 = new createjs.LoadQueue(true); // http://www.createjs.com/Docs/PreloadJS/classes/LoadQueue.html
+var scale$1 = 0.5; // TODO
 
 q$1.setMaxConnections(8);
 
@@ -57,26 +58,45 @@ q$1.setMaxConnections(8);
 // Initialise
 function init$1 (_data) {
   data = _data;
-  var files = _(data).sortBy("z").map(function (d) { return ({ id: d.id, src: "img/people/" + d.id + ".png" }); }).value();
-  q$1.loadManifest(files);
 
   q$1.on("progress", function (e) { $.publish("gallery.progress", e.progress); }); // NB: le suivi de progress ne peut pas utiliser de promise, on utilise pub/sub
 
-  return new Promise(function (resolve, reject) {
-    q$1.on("complete", function (e) {
+  return preloadWithPromise$1(
+    q$1,
+    _(data).sortBy("z").map(function (d) { return ({ id: d.id, src: "img/people/" + d.id + ".png" }); }).value()
+  )
+  .then(function (images) {
+    isGalleryLoaded = true;
+    data = _(images).sortBy("item.id").zipWith(
+      data,
+      function (i, d) { return _(d).assign({ img: i.result }).value(); }
+    ).value();
+  });
+
+
+/*
+  return new Promise((resolve, reject) => {
+    q.on("complete", e => {
       isGalleryLoaded = true;
-      var images = q$1.getItems();
+      var images = q.getItems();
 
       data = _(images).sortBy("item.id").zipWith(
         data,
-        function (i, d) { return _(d).assign({ img: i.result }).value(); }
+        (i, d) =>  _(d).assign({ img: i.result }).value()
       ).value();
 
-      _(data).orderBy("z").forEach(function (d, i, j) {
-        window.setTimeout(function () {
+      _(data).orderBy("z").forEach((d, i, j) => {
+        window.setTimeout(() => {
           $(d.img)
           .attr("data-id", d.id)
-          .attr("style", "z-index: " + (data.length - d.z) + "; width: " + (d.w / 2) + "px; height: auto; left:" + (d.x  / 2) + "px; bottom:" + (d.y / 2) + "px;")
+          .css({
+            zIndex: (data.length - d.z),
+            width: (d.w * scale) + "px",
+            height: "auto",
+            left: (d.x  * scale) + "px",
+            bottom: (d.y * scale) + "px"
+          })
+          // .attr("style", "z-index: " + (data.length - d.z) + "; width: " + (d.w * s) + "px; height: auto; left:" + (d.x  * s) + "px; bottom:" + (d.y * s) + "px;")
           .addClass("animated")
           .addClass("bounceIn")
           .appendTo(".peopleContainer");
@@ -84,15 +104,15 @@ function init$1 (_data) {
           if (i + 1 === j.length) {
 
             // Silhouettes
-            _(data).filter(function (d) { return d.path; }).orderBy("z").reverse().forEach(function (d, i, j) {
+            _(data).filter(d => d.path).orderBy("z").reverse().forEach((d, i, j) => {
               d3.select(".shapesContainer").datum(d).append("path").attr("d", d.path).attr("data-name", d.name).attr("data-id", d.id);
             });
 
-            $(".shapesContainer").on("mouseenter", "path", function (e) {
+            $(".shapesContainer").on("mouseenter", "path", e => {
               var $elem = $(e.target);
               $(".info").html($elem.data("name"));
 
-              $elem.one("mouseleave", function (f) { $(".info").html(""); });
+              $elem.one("mouseleave", f => { $(".info").html(""); });
             });
 
             resolve();
@@ -101,21 +121,66 @@ function init$1 (_data) {
         }, 35 * i);
       });
     });
+  });
+*/
 
+}
+
+
+function display () {
+  return new Promise(function (resolve, reject) {
+    if (!isGalleryLoaded) {
+      reject("La galerie n'est pas encore chargée.");
+    } else {
+      _(data).orderBy("z").forEach(function (d, i, j) {
+        window.setTimeout(function () {
+          $(d.img)
+          .attr("data-id", d.id)
+          .css({
+            zIndex: (data.length - d.z),
+            width: (d.w * scale$1) + "px",
+            height: "auto",
+            left: (d.x  * scale$1) + "px",
+            bottom: (d.y * scale$1) + "px"
+          })
+          .addClass("animated")
+          .addClass("bounceIn")
+          .appendTo(".peopleContainer");
+
+          if (i + 1 === j.length) {
+            _(data).filter(function (d) { return d.path; }).orderBy("z").reverse().forEach(function (d, i, j) {
+              d3.select(".shapesContainer").datum(d).append("path").attr("d", d.path).attr("data-name", d.name).attr("data-id", d.id);
+            });
+
+            $(".shapesContainer").on("mouseenter", "path", function (e) {
+              var $elem = $(e.target);
+              $(".info").html($elem.data("name"));
+              $elem.one("mouseleave", function (f) { $(".info").html(""); });
+            });
+
+            $(d.img).on("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", resolve);
+          }
+        }, 35 * i);
+      });
+    }
   });
 }
+
 
 function on (event, callback) {
   $.subscribe(event, callback);
 }
 
 
-function display () {
-  if (!isGalleryLoaded) { return; }
-
-
-
+function preloadWithPromise$1 (queue, manifest, doRemoveAll) { // NB : duplicated from main.js
+  if (!!doRemoveAll) { queue.removeAll(); }
+  queue.loadManifest(manifest);
+  return new Promise(function (resolve, reject) {
+    queue.on("complete", function () { resolve(queue.getItems()); });
+    queue.on("error", function () { reject("Erreur de chargement."); });
+  });
 }
+
 
 /*! Tiny Pub/Sub - v0.7.0 - 2013-01-29
  * https://github.com/cowboy/jquery-tiny-pubsub
@@ -128,22 +193,41 @@ var gallery = {
   on: on
 };
 
+// import route from "riot-route";
 window.scale = 0.5;
 
 var q = new createjs.LoadQueue(true);
 q.setMaxConnections(8);
 
 $(main);
-// if (!window.Promise) { // Conditionally loads Promise polyfill (see: https://philipwalton.com/articles/loading-polyfills-only-when-needed/)
-//   q.loadFile("dist/vendor/es6-promise.min.js");
-//   q.on("complete", () => {
-//     window.Promise = ES6Promise;
-//     $(main);
-//   });
-//   q.on("error", err => { console.log("Erreur de chargement de script"); });
-// } else {
-//   $(main);
-// }
+/*
+if (!window.Promise) { // Conditionally loads Promise polyfill (see: https://philipwalton.com/articles/loading-polyfills-only-when-needed/)
+  q.loadFile("dist/vendor/es6-promise.min.js");
+  q.on("complete", () => {
+    window.Promise = ES6Promise;
+    $(main);
+  });
+  q.on("error", err => { console.log("Erreur de chargement de script"); });
+} else {
+  $(main);
+}
+*/
+
+/*
+// Routing
+route("/", () => {
+});
+
+route("/*", function (code) {
+  var item = _(data).find({ "code": code });
+  if (item === undefined) {
+    route("/");
+  } else {    
+  }
+});
+
+route.start(true);
+*/
 
 function main () {
   var data, p;
@@ -170,16 +254,16 @@ function main () {
     gallery.on("gallery.progress", function (e, i) { $(".info").html(Math.round(i * 100) + "%"); });
     return p;
   })
+  .then(function () { return delayPromise(2000); })
   .then(function () {
-    window.setTimeout(function () {
-      background.rotate.stop();
-      $("#rg").removeClass("bounce");
-    }, 2000);
+    $("#rg").removeClass("bounce");
+    return gallery.display();
   })
+  .then(function () { return delayPromise(2000); })
+  .then(background.rotate.stop)
   .catch(function (reason) { console.error(reason); });
 
 }
-
 
 function preloadWithPromise (queue, manifest, doRemoveAll) {
   if (!!doRemoveAll) { queue.removeAll(); }
@@ -190,59 +274,10 @@ function preloadWithPromise (queue, manifest, doRemoveAll) {
   });
 }
 
-
-
-
-
-/*
-import route from "riot-route";
-import background from "./background.js";
-import gallery from "./gallery.js";
-
-var peopleAnimation = "flip";
-
-$(() => {
-  $.getJSON("data/data.json").then(run);
-});
-
-$(window).on("resize", () => {
-  background.resize();
-});
-
-function run (data) {
-  background.init();
-  background.rotate.start();
-
-  gallery.init(data);
-
-  gallery.on("gallery.progress", (e, data) => {
-    $(".info").html(Math.round(data * 100) + "%");
+function delayPromise (t) {
+  return new Promise(function (resolve, reject) {
+    window.setTimeout(resolve, t);
   });
-
-  gallery.on("gallery.complete", e => {
-    $(".info").html("Done!");
-    background.rotate.stop();
-    gallery.display();
-  });
-
-  // Routing
-  // route("/", () => {
-  // });
-
-  // route("/*", function (code) {
-  //   var item = _(data).find({ "code": code });
-  //   if (item === undefined) {
-  //     route("/");
-  //   } else {
-  //     // DO SOMETHING
-  //   }
-  // });
-
-  // route.start(true);
-
-
-
 }
-*/
 
 }());

@@ -1,3 +1,4 @@
+// import route from "riot-route";
 import background from "./modules/background.js";
 import gallery from "./modules/gallery.js";
 
@@ -7,16 +8,34 @@ var q = new createjs.LoadQueue(true);
 q.setMaxConnections(8);
 
 $(main);
-// if (!window.Promise) { // Conditionally loads Promise polyfill (see: https://philipwalton.com/articles/loading-polyfills-only-when-needed/)
-//   q.loadFile("dist/vendor/es6-promise.min.js");
-//   q.on("complete", () => {
-//     window.Promise = ES6Promise;
-//     $(main);
-//   });
-//   q.on("error", err => { console.log("Erreur de chargement de script"); });
-// } else {
-//   $(main);
-// }
+/*
+if (!window.Promise) { // Conditionally loads Promise polyfill (see: https://philipwalton.com/articles/loading-polyfills-only-when-needed/)
+  q.loadFile("dist/vendor/es6-promise.min.js");
+  q.on("complete", () => {
+    window.Promise = ES6Promise;
+    $(main);
+  });
+  q.on("error", err => { console.log("Erreur de chargement de script"); });
+} else {
+  $(main);
+}
+*/
+
+/*
+// Routing
+route("/", () => {
+});
+
+route("/*", function (code) {
+  var item = _(data).find({ "code": code });
+  if (item === undefined) {
+    route("/");
+  } else {    
+  }
+});
+
+route.start(true);
+*/
 
 function main () {
   var data, p;
@@ -43,16 +62,16 @@ function main () {
     gallery.on("gallery.progress", (e, i) => { $(".info").html(Math.round(i * 100) + "%"); });
     return p;
   })
+  .then(() => delayPromise(2000))
   .then(() => {
-    window.setTimeout(() => {
-      background.rotate.stop();
-      $("#rg").removeClass("bounce");
-    }, 2000);
+    $("#rg").removeClass("bounce");
+    return gallery.display();
   })
+  .then(() => delayPromise(2000))
+  .then(background.rotate.stop)
   .catch(reason => { console.error(reason); });
 
 }
-
 
 function preloadWithPromise (queue, manifest, doRemoveAll) {
   if (!!doRemoveAll) queue.removeAll();
@@ -63,57 +82,8 @@ function preloadWithPromise (queue, manifest, doRemoveAll) {
   });
 }
 
-
-
-
-
-/*
-import route from "riot-route";
-import background from "./background.js";
-import gallery from "./gallery.js";
-
-var peopleAnimation = "flip";
-
-$(() => {
-  $.getJSON("data/data.json").then(run);
-});
-
-$(window).on("resize", () => {
-  background.resize();
-});
-
-function run (data) {
-  background.init();
-  background.rotate.start();
-
-  gallery.init(data);
-
-  gallery.on("gallery.progress", (e, data) => {
-    $(".info").html(Math.round(data * 100) + "%");
+function delayPromise (t) {
+  return new Promise((resolve, reject) => {
+    window.setTimeout(resolve, t);
   });
-
-  gallery.on("gallery.complete", e => {
-    $(".info").html("Done!");
-    background.rotate.stop();
-    gallery.display();
-  });
-
-  // Routing
-  // route("/", () => {
-  // });
-
-  // route("/*", function (code) {
-  //   var item = _(data).find({ "code": code });
-  //   if (item === undefined) {
-  //     route("/");
-  //   } else {
-  //     // DO SOMETHING
-  //   }
-  // });
-
-  // route.start(true);
-
-
-
 }
-*/
