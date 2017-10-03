@@ -36,24 +36,28 @@ body {
  }
 
 #rg {
-  /*left: 310px; bottom: -50px; */
+  z-index: 51;
   pointer-events: none;
 }
 
 #studio {
-  z-index: 1000;
+  z-index: 52;
   left: 50px; bottom: 14px;
   width: 600px; height: auto;
   pointer-events: none;
-  /*display: none;*/
 }
 
 #galerie {
   left: 151px; bottom: 190px;
 }
 
+/*
 .peopleContainer { position: absolute; z-index: 1; top: 0; right: 0; bottom: 0; left: 0; }
 .shapesContainer { position: absolute; z-index: 2; right: 0; bottom: 0; left: 0; }
+*/
+.main { z-index: 1;}
+.peopleContainer { position: absolute; z-index: auto; top: 0; right: 0; bottom: 0; left: 0; }
+.shapesContainer { position: absolute; z-index: 1000; right: 0; bottom: 0; left: 0; }
 
 svg.shapesContainer path {
   fill: transparent;

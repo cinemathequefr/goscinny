@@ -34,7 +34,7 @@ function display () {
 
 
       // NOTE: l'ordre de superposition des paths svg est forcément celui de leur ordre d'affichage (pas de z-index), qui est l'ordre inverse de celui d'affichage des images, donc il faut deux itérations distinctes
-      _(data).orderBy("z").reverse().forEach((d, i, j) => {
+      _(data).orderBy("order").reverse().forEach((d, i, j) => {
         d3.select(".shapesContainer")
         .datum(d)
         .append("path")
@@ -44,20 +44,22 @@ function display () {
         .style("display", "none");
       });
 
-      _(data).orderBy("z").forEach((d, i, j) => {
+      _(data).orderBy("order").forEach((d, i, j) => {
+        var anim = d.anim || "bounceIn";
         window.setTimeout(
           () => {
             $(d.img)
             .attr("data-id", d.id)
             .css({
-              zIndex: data.length - d.z,
+              zIndex: d.z,
+              // zIndex: data.length - d.z,
               width: (d.w * scale) + "px",
               height: "auto",
               left: (d.x  * scale) + "px",
               bottom: (d.y * scale) + "px"
             })
             .addClass("animated")
-            .addClass("bounceIn")
+            .addClass(anim)
             .appendTo(".peopleContainer")
             .on("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", () => {
               $("path[data-id='" + d.id + "']").show();
@@ -76,7 +78,7 @@ function display () {
             }
 
           },
-          (35 * i) + (i + 1 === j.length ? 4000 : 0) // Délai supplémentaire pour le dernier personnage
+          (35 * i) + (i + 2 === j.length ? 3000 : 0) + (i + 1 === j.length ? 6000 : 0) // Délai supplémentaire pour les 2 derniers personnages
         );
       });
     }
