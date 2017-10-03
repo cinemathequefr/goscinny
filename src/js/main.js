@@ -41,7 +41,7 @@ function main () {
   var data, p;
 
   background.init();
-  // background.rotate.start();
+  background.rotate.start();
 
   preloadWithPromise(q, ["img/studio.png", "img/rg.png", "data/data.json"])
   .then(d => {
@@ -70,6 +70,7 @@ function main () {
     gallery.on("gallery.firstMouseenter", background.rotate.stop);
     return gallery.display();
   })
+  .then(() => { console.log("Finito"); })
   .catch(reason => { console.error(reason); });
 
 }

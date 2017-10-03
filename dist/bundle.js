@@ -71,58 +71,6 @@ function init$1 (_data) {
       function (i, d) { return _(d).assign({ img: i.result }).value(); }
     ).value();
   });
-
-
-/*
-  return new Promise((resolve, reject) => {
-    q.on("complete", e => {
-      isGalleryLoaded = true;
-      var images = q.getItems();
-
-      data = _(images).sortBy("item.id").zipWith(
-        data,
-        (i, d) =>  _(d).assign({ img: i.result }).value()
-      ).value();
-
-      _(data).orderBy("z").forEach((d, i, j) => {
-        window.setTimeout(() => {
-          $(d.img)
-          .attr("data-id", d.id)
-          .css({
-            zIndex: (data.length - d.z),
-            width: (d.w * scale) + "px",
-            height: "auto",
-            left: (d.x  * scale) + "px",
-            bottom: (d.y * scale) + "px"
-          })
-          // .attr("style", "z-index: " + (data.length - d.z) + "; width: " + (d.w * s) + "px; height: auto; left:" + (d.x  * s) + "px; bottom:" + (d.y * s) + "px;")
-          .addClass("animated")
-          .addClass("bounceIn")
-          .appendTo(".peopleContainer");
-
-          if (i + 1 === j.length) {
-
-            // Silhouettes
-            _(data).filter(d => d.path).orderBy("z").reverse().forEach((d, i, j) => {
-              d3.select(".shapesContainer").datum(d).append("path").attr("d", d.path).attr("data-name", d.name).attr("data-id", d.id);
-            });
-
-            $(".shapesContainer").on("mouseenter", "path", e => {
-              var $elem = $(e.target);
-              $(".info").html($elem.data("name"));
-
-              $elem.one("mouseleave", f => { $(".info").html(""); });
-            });
-
-            resolve();
-          }
-
-        }, 35 * i);
-      });
-    });
-  });
-*/
-
 }
 
 
@@ -131,37 +79,53 @@ function display () {
     if (!isGalleryLoaded) {
       reject("La galerie n'est pas encore chargée.");
     } else {
+
+
+      // NOTE: l'ordre de superposition des paths svg est forcément celui de leur ordre d'affichage (pas de z-index), qui est l'ordre inverse de celui d'affichage des images, donc il faut deux itérations distinctes
+      _(data).orderBy("z").reverse().forEach(function (d, i, j) {
+        d3.select(".shapesContainer")
+        .datum(d)
+        .append("path")
+        .attr("d", d.path)
+        .attr("data-name", d.name)
+        .attr("data-id", d.id)
+        .style("display", "none");
+      });
+
       _(data).orderBy("z").forEach(function (d, i, j) {
-        window.setTimeout(function () {
-          $(d.img)
-          .attr("data-id", d.id)
-          .css({
-            zIndex: (data.length - d.z),
-            width: (d.w * scale$1) + "px",
-            height: "auto",
-            left: (d.x  * scale$1) + "px",
-            bottom: (d.y * scale$1) + "px"
-          })
-          .addClass("animated")
-          .addClass("bounceIn")
-          .appendTo(".peopleContainer");
-
-          if (i + 1 === j.length) {
-            _(data).filter(function (d) { return d.path; }).orderBy("z").reverse().forEach(function (d, i, j) {
-              d3.select(".shapesContainer").datum(d).append("path").attr("d", d.path).attr("data-name", d.name).attr("data-id", d.id);
+        window.setTimeout(
+          function () {
+            $(d.img)
+            .attr("data-id", d.id)
+            .css({
+              zIndex: data.length - d.z,
+              width: (d.w * scale$1) + "px",
+              height: "auto",
+              left: (d.x  * scale$1) + "px",
+              bottom: (d.y * scale$1) + "px"
+            })
+            .addClass("animated")
+            .addClass("bounceIn")
+            .appendTo(".peopleContainer")
+            .on("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", function () {
+              $("path[data-id='" + d.id + "']").show();
             });
 
-            $(".shapesContainer").one("mouseenter", "path", function (e) {
-              mouseenter(e);
-              $.publish("gallery.firstMouseenter"); // Au premier mouseenter, on arrête l'animation du background
-              $(".shapesContainer").on("mouseenter", "path", function (e) {
+            // Traitements finaux (à la dernière image)
+            if (i === j.length - 1) {
+              $(".shapesContainer").one("mouseenter", "path", function (e) {
                 mouseenter(e);
+                $.publish("gallery.firstMouseenter"); // Au premier mouseenter, on arrête l'animation du background
+                $(".shapesContainer").on("mouseenter", "path", function (e) {
+                  mouseenter(e);
+                });
               });
-            });
+              $(d.img).on("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", resolve);
+            }
 
-            $(d.img).on("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", resolve);
-          }
-        }, (35 * i) + (i + 1 === j.length ? 2000 : 0)); // Délai supplémentaire pour le dernier personnage
+          },
+          (35 * i) + (i + 1 === j.length ? 4000 : 0) // Délai supplémentaire pour le dernier personnage
+        );
       });
     }
   });
@@ -242,7 +206,7 @@ function main () {
   var data, p;
 
   background.init();
-  // background.rotate.start();
+  background.rotate.start();
 
   preloadWithPromise(q, ["img/studio.png", "img/rg.png", "data/data.json"])
   .then(function (d) {
@@ -271,6 +235,7 @@ function main () {
     gallery.on("gallery.firstMouseenter", background.rotate.stop);
     return gallery.display();
   })
+  .then(function () { console.log("Finito"); })
   .catch(function (reason) { console.error(reason); });
 
 }
