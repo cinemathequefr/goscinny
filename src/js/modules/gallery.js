@@ -52,7 +52,6 @@ function display () {
             .attr("data-id", d.id)
             .css({
               zIndex: d.z,
-              // zIndex: data.length - d.z,
               width: (d.w * scale) + "px",
               height: "auto",
               left: (d.x  * scale) + "px",
@@ -78,7 +77,7 @@ function display () {
             }
 
           },
-          (35 * i) + (i + 2 === j.length ? 3000 : 0) + (i + 1 === j.length ? 6000 : 0) // Délai supplémentaire pour les 2 derniers personnages
+          (35 * i) + (i + 2 === j.length ? 1500 : 0) + (i + 1 === j.length ? 3500 : 0) // Délai supplémentaire pour les 2 derniers personnages
         );
       });
     }

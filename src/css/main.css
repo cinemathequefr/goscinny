@@ -1,33 +1,24 @@
 body {
+  position: relative;
   overflow: hidden;
   background-color: #e55b17;
-  /*background-color: #369;*/
 }
-
 
 .backgroundContainer {
+  position: ;
   display: none;
+  z-index: 2;
 }
-
-/*
-.backgroundContainer svg {
-  background-color: #ff0;
-}
-*/
 
 .backgroundContainer svg path {
   stroke-width: 0;
   fill: #d4e517;
 }
 
-
-
 .main {
   position: absolute;
   top: 0; bottom: 0; 
   left: calc(50vw - 350px); width: 700px;
-  /*outline: solid 1px red;*/
-  /*left: calc(50vw - 500px); width: 1000px;*/
 }
 
 .main img {
@@ -51,11 +42,6 @@ body {
   left: 151px; bottom: 190px;
 }
 
-/*
-.peopleContainer { position: absolute; z-index: 1; top: 0; right: 0; bottom: 0; left: 0; }
-.shapesContainer { position: absolute; z-index: 2; right: 0; bottom: 0; left: 0; }
-*/
-.main { z-index: 1;}
 .peopleContainer { position: absolute; z-index: auto; top: 0; right: 0; bottom: 0; left: 0; }
 .shapesContainer { position: absolute; z-index: 1000; right: 0; bottom: 0; left: 0; }
 
@@ -63,29 +49,19 @@ svg.shapesContainer path {
   fill: transparent;
   cursor: pointer;
   transition: 0.2s;
-  /*stroke: red;*/
-  /*transform-origin: center 70%;*/
 }
 
 svg.shapesContainer path:hover {
-  /*fill: #f96;*/
   stroke: red;
   stroke-width: 4px;
-
 }
 
-
 .peopleContainer > img {
-  /*
-  transform-origin: left bottom;
-  transform: scale(0.5);
-  */
   transform-origin: center 70%;
   position: absolute;
   height: auto;
   cursor: pointer;
   transition: 0.1s;
-
 }
 
 .blowup {
@@ -328,3 +304,75 @@ a#logocf:hover {
 }
 
 
+@-webkit-keyframes bounceInRight {
+  from, 60%, 75%, 90%, to {
+    -webkit-animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+  }
+
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(3000px, 0, 0);
+    transform: translate3d(3000px, 0, 0);
+  }
+
+  60% {
+    opacity: 1;
+    -webkit-transform: translate3d(-25px, 0, 0);
+    transform: translate3d(-25px, 0, 0);
+  }
+
+  75% {
+    -webkit-transform: translate3d(10px, 0, 0);
+    transform: translate3d(10px, 0, 0);
+  }
+
+  90% {
+    -webkit-transform: translate3d(-5px, 0, 0);
+    transform: translate3d(-5px, 0, 0);
+  }
+
+  to {
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+
+@keyframes bounceInRight {
+  from, 60%, 75%, 90%, to {
+    -webkit-animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+  }
+
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(3000px, 0, 0);
+    transform: translate3d(3000px, 0, 0);
+  }
+
+  60% {
+    opacity: 1;
+    -webkit-transform: translate3d(-25px, 0, 0);
+    transform: translate3d(-25px, 0, 0);
+  }
+
+  75% {
+    -webkit-transform: translate3d(10px, 0, 0);
+    transform: translate3d(10px, 0, 0);
+  }
+
+  90% {
+    -webkit-transform: translate3d(-5px, 0, 0);
+    transform: translate3d(-5px, 0, 0);
+  }
+
+  to {
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+
+.bounceInRight {
+  -webkit-animation-name: bounceInRight;
+  animation-name: bounceInRight;
+}

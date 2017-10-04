@@ -43,7 +43,7 @@ function main () {
   background.init();
   background.rotate.start();
 
-  preloadWithPromise(q, ["img/studio.png", "img/rg.png", "data/data.json"])
+  preloadWithPromise(q, ["img/studio.png", "img/rg.png", "data/gallery.json"])
   .then(d => {
     $(d[0].result).attr("id", "studio").appendTo(".main");
     $(d[1].result)
@@ -53,7 +53,8 @@ function main () {
         left: (470 * scale) + "px",
         bottom: (-60 * scale) + "px",
         width: (500 * scale) + "px",
-        height: (530 * scale) + "px" })
+        height: (530 * scale) + "px"
+      })
       .appendTo(".main");
 
     $(".backgroundContainer").show();
@@ -62,15 +63,15 @@ function main () {
 
     p = gallery.init(data);
     gallery.on("gallery.progress", (e, i) => { $(".info").html(Math.round(i * 100) + "%"); });
-    return p;
+    return p; // UNUSED?
   })
+  // Charger ici les données texts.json ?
   .then(() => delayPromise(2000))
   .then(() => {
     $("#rg").removeClass("bounce");
     gallery.on("gallery.firstMouseenter", background.rotate.stop);
     return gallery.display();
   })
-  .then(() => { console.log("Finito"); })
   .catch(reason => { console.error(reason); });
 
 }

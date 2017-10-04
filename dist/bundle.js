@@ -100,7 +100,6 @@ function display () {
             .attr("data-id", d.id)
             .css({
               zIndex: d.z,
-              // zIndex: data.length - d.z,
               width: (d.w * scale$1) + "px",
               height: "auto",
               left: (d.x  * scale$1) + "px",
@@ -126,7 +125,7 @@ function display () {
             }
 
           },
-          (35 * i) + (i + 2 === j.length ? 3000 : 0) + (i + 1 === j.length ? 6000 : 0) // Délai supplémentaire pour les 2 derniers personnages
+          (35 * i) + (i + 2 === j.length ? 1500 : 0) + (i + 1 === j.length ? 3500 : 0) // Délai supplémentaire pour les 2 derniers personnages
         );
       });
     }
@@ -210,7 +209,7 @@ function main () {
   background.init();
   background.rotate.start();
 
-  preloadWithPromise(q, ["img/studio.png", "img/rg.png", "data/data.json"])
+  preloadWithPromise(q, ["img/studio.png", "img/rg.png", "data/gallery.json"])
   .then(function (d) {
     $(d[0].result).attr("id", "studio").appendTo(".main");
     $(d[1].result)
@@ -220,7 +219,8 @@ function main () {
         left: (470 * scale) + "px",
         bottom: (-60 * scale) + "px",
         width: (500 * scale) + "px",
-        height: (530 * scale) + "px" })
+        height: (530 * scale) + "px"
+      })
       .appendTo(".main");
 
     $(".backgroundContainer").show();
@@ -229,15 +229,15 @@ function main () {
 
     p = gallery.init(data);
     gallery.on("gallery.progress", function (e, i) { $(".info").html(Math.round(i * 100) + "%"); });
-    return p;
+    return p; // UNUSED?
   })
+  // Charger ici les données texts.json ?
   .then(function () { return delayPromise(2000); })
   .then(function () {
     $("#rg").removeClass("bounce");
     gallery.on("gallery.firstMouseenter", background.rotate.stop);
     return gallery.display();
   })
-  .then(function () { console.log("Finito"); })
   .catch(function (reason) { console.error(reason); });
 
 }
