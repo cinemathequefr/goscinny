@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/cinemathequefr/goscinny#readme",
   "dependencies": {
-    "riot-route": "^3.1.2"
+    "perfect-scrollbar": "^0.8.1",
+    "riot-route": "^3.1.2",
+    "velocity-animate": "^1.5.0"
   },
   "devDependencies": {
     "rollup": "^0.49.3",

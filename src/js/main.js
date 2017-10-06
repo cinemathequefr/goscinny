@@ -1,12 +1,22 @@
-// import route from "riot-route";
+import route from "riot-route";
 import background from "./modules/background.js";
 import gallery from "./modules/gallery.js";
 import promiseLoad from "./modules/promiseload.js";
+import Viewer from "./modules/viewer.js";
+
 
 window.scale = 0.5;
 
-// var q = new createjs.LoadQueue(true);
-// q.setMaxConnections(8);
+var template = {
+  content: _.template([
+    "<div class='content'>",
+      "<h1><%= title %></h1>",
+      "<div class='text'><%= text %></div>",
+    "</div>"
+  ].join(""))
+};
+
+
 
 $(main);
 
@@ -24,36 +34,22 @@ if (!window.Promise) { // Conditionally loads Promise polyfill (see: https://phi
 }
 */
 
-/*
-// Routing
-route("/", () => {
-});
-
-route("/*", function (code) {
-  var item = _(data).find({ "code": code });
-  if (item === undefined) {
-    route("/");
-  } else {    
-  }
-});
-
-route.start(true);
-*/
-
 function main () {
-  // var data, p;
   var data = {
     gallery: null,
     texts: null
   };
 
+  var v = new Viewer({
+    $parent: $(".viewer-placeholder"),
+    enableRequestClose: true
+  });
 
   promiseLoad.init();
   background.init();
   background.rotate.start();
 
   promiseLoad.load(["img/studio.png", "img/rg.png", "data/gallery.json"])
-  // preloadWithPromise(q, ["img/studio.png", "img/rg.png", "data/gallery.json"])
   .then(d => {
     $(d[0].result).attr("id", "studio").appendTo(".main");
     $(d[1].result)
@@ -83,22 +79,82 @@ function main () {
   .then(assets => {
     assets = _(assets).map(d => d.result).value();
     data.texts = assets.shift();
-    data.gallery = _(assets).sortBy("item.id").zipWith(
+
+    data.gallery = _(assets)
+    .sortBy("item.id")
+    .zipWith( // Ajoute les blobs images
       data.gallery,
       (i, d) =>  _(d).assign({ img: i }).value()
-    ).value();
-    return gallery.display(data.gallery);
-  })
-  // .then(() => delayPromise(2000))
-  .then(() => {
-    $("#rg").removeClass("bounce");
+    )
+    .map(d => { // Ajoute les codes (url)
+      var t = _(data.texts).find({ id: d.text });
+      return t ? _(d).assign({ code: t.code, textId: t.id }).value() : d;
+    })
+    .value();
+
+
+    // UI binding + routing
+
+    v.on("viewer.open", (e) => {
+      v.$content.html(template.content(_(data.texts).find({ id: parseInt(v.$source.data("textid"), 10) })));
+    });
+
+    v.on("viewer.requestClose", () => {
+      route("/");
+    });
+
+    $(".shapesContainer").on("click", "path", e => {
+      route($(e.target).data("code"));
+    });
+
+
+    route("/", () => { v.close(); });
+
+    route("/*", function (code) {
+      var item = _(data.texts).find({ "code": code });
+      if (item === undefined) {
+        route("/");
+      } else {
+
+
+        if (item.text !== "") {
+          window.setTimeout(() => {
+            v.open($("path[data-id=50]"));
+          }, 275);
+
+        }
+
+      }
+    });
+    route.start(true);
+
+
+
+    var p = gallery.display(data.gallery);
     gallery.on("gallery.firstMouseenter", background.rotate.stop);
+    return p;
+
+
+
+  })
+  .then(() => {
+
+
+    $("#rg").removeClass("bounce");
     return;
   })
   .catch(reason => { console.error(reason); });
 
+
+
+
+
+
+
 }
 
+
+/*
 function preloadWithPromise (queue, manifest, doRemoveAll) {
   if (!!doRemoveAll) queue.removeAll();
   queue.loadManifest(manifest);
@@ -107,6 +163,7 @@ function preloadWithPromise (queue, manifest, doRemoveAll) {
     queue.on("error", () => { reject("Erreur de chargement."); });
   });
 }
+*/
 
 function delayPromise (t) {
   return new Promise((resolve, reject) => {

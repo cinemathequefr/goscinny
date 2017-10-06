@@ -1,7 +1,7 @@
 
 
 
-function display (data) {
+function display (data) { // `data` est un objet contenant les informations sur chaque item de la galerie, y compris le blob image.
   return new Promise((resolve, reject) => {
     _(data).orderBy("order").reverse().forEach((d, i, j) => {
       d3.select(".shapesContainer")
@@ -10,6 +10,8 @@ function display (data) {
       .attr("d", d.path)
       .attr("data-name", d.name)
       .attr("data-id", d.id)
+      .attr("data-code", d.code)
+      .attr("data-textid", d.textId)
       .style("display", "none");
     });
 
@@ -35,9 +37,13 @@ function display (data) {
 
           // Traitements finaux (à la dernière image)
           if (i === j.length - 1) {
+
+
+
+
             $(".shapesContainer").one("mouseenter", "path", e => {
               mouseenter(e);
-              $.publish("gallery.firstMouseenter"); // Au premier mouseenter, on arrête l'animation du background
+              $.publish("gallery.firstMouseenter");
               $(".shapesContainer").on("mouseenter", "path", e => {
                 mouseenter(e);
               });
@@ -45,7 +51,8 @@ function display (data) {
             $(d.img).on("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", resolve);
           }
         },
-        (35 * i) + (i + 2 === j.length ? 1500 : 0) + (i + 1 === j.length ? 3500 : 0) // Délai supplémentaire pour les 2 derniers personnages
+        (35 * i) // Sans délai supplémentaire pour les 2 derniers personnages
+        // (35 * i) + (i + 2 === j.length ? 750 : 0) + (i + 1 === j.length ? 1500 : 0) // Délai supplémentaire pour les 2 derniers personnages
       );
     });
   });
@@ -59,10 +66,10 @@ function mouseenter (e) {
 }
 
 
-
 function on (event, callback) {
   $.subscribe(event, callback);
 }
+
 
 /*! Tiny Pub/Sub - v0.7.0 - 2013-01-29
  * https://github.com/cowboy/jquery-tiny-pubsub

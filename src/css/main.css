@@ -2,6 +2,7 @@ body {
   position: relative;
   overflow: hidden;
   background-color: #e55b17;
+  z-index: 0;
 }
 
 .backgroundContainer {
@@ -19,6 +20,7 @@ body {
   position: absolute;
   top: 0; bottom: 0; 
   left: calc(50vw - 350px); width: 700px;
+  z-index: 1;
 }
 
 .main img {
@@ -62,6 +64,22 @@ svg.shapesContainer path:hover {
   height: auto;
   cursor: pointer;
   transition: 0.1s;
+  user-select: none; -moz-user-select: none; -webkit-user-select: none; -ms-user-select: none;
+}
+
+.viewer {
+  z-index: 2000;
+}
+
+.viewer-content {
+  width: 100%;
+  padding: 36px;
+  box-sizing: border-box;
+}
+
+
+.viewer-content .content {
+  width: 1000px; margin: 0 auto;
 }
 
 .blowup {
@@ -87,6 +105,7 @@ a#logocf {
 a#logocf:hover {
   opacity: 0.95;
 }
+
 
 
 /* Animations */
