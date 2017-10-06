@@ -475,7 +475,6 @@ function init (count) {
 
   bg = d3
     .selectAll(".wrapper")
-    // .selectAll(".backgroundContainer")
     .append("svg")
     .classed("background", true)
     .append("g")
@@ -499,7 +498,7 @@ function resize () {
   var h = $(document).outerHeight(true);
 
 
-  d3.select(".wrapper svg")
+  d3.select("svg.background")
     .attr("width", w)
     .attr("height", h)
     .select("g")
@@ -522,10 +521,126 @@ var background = {
   rotate: rotate
 };
 
+function display (data) { // `data` est un objet contenant les informations sur chaque item de la galerie, y compris le blob image.
+  return new Promise(function (resolve, reject) {
+    _(data).orderBy("order").reverse().forEach(function (d, i, j) {
+      d3.select(".shapescontainer")
+      .datum(d)
+      .append("path")
+      .attr("d", d.path)
+      .attr("data-name", d.name)
+      .attr("data-id", d.id)
+      .attr("data-code", d.code)
+      .attr("data-textid", d.textId)
+      .style("display", "none");
+    });
+
+    _(data).orderBy("order").forEach(function (d, i, j) {
+      var anim = d.anim || "bounceIn";
+      window.setTimeout(
+        function () {
+          $(d.img)
+          .attr("data-id", d.id)
+          .css({
+            zIndex: d.z,
+            width: (d.w * scale) + "px",
+            height: "auto",
+            left: (d.x  * scale) + "px",
+            bottom: (d.y * scale) + "px"
+          })
+          .addClass("animated")
+          .addClass(anim)
+          .appendTo(".peoplecontainer")
+          .one("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", function () {
+            $("path[data-id='" + d.id + "']").show();
+          });
+
+          // Traitements finaux (à la dernière image)
+          if (i === j.length - 1) {
+            $(".shapescontainer").one("mouseenter", "path", function (e) {
+              mouseenter(e);
+              $.publish("gallery.firstMouseenter");
+              $(".shapescontainer").on("mouseenter", "path", function (e) {
+                mouseenter(e);
+              });
+            });
+            $(d.img).one("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", resolve);
+          }
+        },
+        (35 * i) // Sans délai supplémentaire pour les 2 derniers personnages
+        // (35 * i) + (i + 2 === j.length ? 750 : 0) + (i + 1 === j.length ? 1500 : 0) // Délai supplémentaire pour les 2 derniers personnages
+      );
+    });
+  });
+}
+
+
+function mouseenter (e) {
+  var $elem = $(e.target);
+  $(".info").html($elem.data("name"));
+  $elem.one("mouseleave", function (f) { $(".info").html(""); });
+}
+
+
+function on (event, callback) {
+  $.subscribe(event, callback);
+}
+
+
+/*! Tiny Pub/Sub - v0.7.0 - 2013-01-29
+ * https://github.com/cowboy/jquery-tiny-pubsub
+ * Copyright (c) 2013 "Cowboy" Ben Alman; Licensed MIT */
 (function(n){var u=n({});n.subscribe=function(){u.on.apply(u,arguments);},n.unsubscribe=function(){u.off.apply(u,arguments);},n.publish=function(){u.trigger.apply(u,arguments);};})(jQuery);
 
+
+var gallery = {
+  display: display,
+  on: on
+};
+
 // DEPS: Promise, preload.js, jQuery (tinyPubSub)
+var q;
+var isInit = false;
+
+function init$1 (maxConnections) {
+  if (!!isInit) { return; }
+  q = new createjs.LoadQueue(true);
+  q.setMaxConnections(parseInt(maxConnections, 10) || 8);
+  isInit = true;
+}
+
+
+function load (manifest, clearQueue, emitProgress) { // SEE: http://www.createjs.com/docs/preloadjs/classes/LoadQueue.html
+  return new Promise(function (resolve, reject) {
+    if (!isInit) { reject("Le module de chargement n'a pas été initialisé."); }
+    if (!!clearQueue) { q.removeAll(); }
+    q.loadManifest(manifest);
+
+    if (!!emitProgress) {
+      q.on("progress", function (e) { $.publish("promiseLoad.progress", e.progress); }); // NB: le suivi de progress ne peut pas utiliser de promise, on utilise pub/sub
+    }
+
+    q.on("complete", function () { resolve(q.getItems()); });
+    q.on("error", function () { reject("Erreur de chargement."); });
+  });
+}
+
+
+function on$1 (event, callback) {
+  $.subscribe(event, callback);
+}
+
+
+/*! Tiny Pub/Sub - v0.7.0 - 2013-01-29
+ * https://github.com/cowboy/jquery-tiny-pubsub
+ * Copyright (c) 2013 "Cowboy" Ben Alman; Licensed MIT */
 (function(n){var u=n({});n.subscribe=function(){u.on.apply(u,arguments);},n.unsubscribe=function(){u.off.apply(u,arguments);},n.publish=function(){u.trigger.apply(u,arguments);};})(jQuery);
+
+var promiseLoad = {
+  init: init$1,
+  load: load,
+  on: on$1
+};
 
 function createCommonjsModule(fn, module) {
 	return module = { exports: {} }, fn(module, module.exports), module.exports;
@@ -7091,11 +7206,8 @@ window.scale = 0.5;
 
 var template = {
   content: _.template([
-    "<div class='content'>",
-      "<h1><%= title %></h1>",
-      "<div class='text'><%= text %></div>",
-    "</div>"
-  ].join(""))
+    "<h1><%= title %></h1>",
+    "<div class='text'><%= text %></div>" ].join(""))
 };
 
 $(main);
@@ -7115,8 +7227,109 @@ if (!window.Promise) { // Conditionally loads Promise polyfill (see: https://phi
 */
 
 function main () {
+  var this$1 = this;
+
+  var data = {
+    gallery: null,
+    texts: null
+  };
+  var currentCode = null; // Code du texte actuellement chargé
+
+  window.onkeydown = function (e) { 
+    return !(e.keyCode == 32);
+  };
+
+  promiseLoad.init();
   background.init();
   // background.rotate.start();
+
+  promiseLoad.load(["img/studio.png", "img/rg.png", "data/gallery.json"])
+  .then(function (d) {
+    $(d[0].result).attr("id", "studio").appendTo(".gallerycontainer");
+    $(d[1].result)
+      .attr("id", "rg")
+      .attr("class", "animated bounce infinite")
+      .css({
+        left: (470 * scale) + "px",
+        bottom: (-60 * scale) + "px",
+        width: (500 * scale) + "px",
+        height: (530 * scale) + "px"
+      })
+      .appendTo(".gallerycontainer");
+
+    data.gallery = d[2].result;
+
+    var p = promiseLoad.load(
+      ["data/texts.json"].concat(_(data.gallery).map(function (d) { return ({ id: d.id, src: "img/people/" + d.id + ".png" }); }).value()),
+      true,
+      true
+    );
+
+    promiseLoad.on("promiseLoad.progress", function (e, i) { $(".info").html(Math.round(i * 100) + "%"); });
+    return p;
+  })
+  .then(function (assets) {
+    assets = _(assets).map(function (d) { return d.result; }).value();
+    data.texts = assets.shift();
+
+    data.gallery = _(assets)
+    .sortBy("item.id")
+    .zipWith( // Ajoute les blobs images
+      data.gallery,
+      function (i, d) { return _(d).assign({ img: i }).value(); }
+    )
+    .map(function (d) { // Ajoute les codes (url)
+      var t = _(data.texts).find({ id: d.text });
+      return t ? _(d).assign({ code: t.code, textId: t.id }).value() : d;
+    })
+    .value();
+
+    // Routing
+    route("/", function () {
+      $(".wrapper").removeClass("show");
+    });
+
+    route("/*", function (code) {
+      currentCode = code;
+      var item = _(data.texts).find({ "code": code });
+      if (item === undefined) {
+        currentCode = null;
+        route("/");
+      } else {
+        $(".textscroller").html(template.content(_(data.texts).find({ code: code })));
+
+        $(".wrapper").addClass("show");
+      }
+    });
+    route.start(true);
+
+    // Bindings
+    $(".shapescontainer").on("click", "path", function (e) {
+      route($(e.target).data("code"));
+    });
+
+    $(document).on("mousewheel", _.debounce(function (e) {
+      if (e.deltaY < 0 && window.location.hash !== "") { route("/"); }
+      if (e.deltaY > 0 && currentCode !== null) { route(currentCode); }
+    }.bind(this$1), 10));
+
+
+
+
+    var p = gallery.display(data.gallery);
+    // gallery.on("gallery.firstMouseenter", background.rotate.stop);
+    return p;
+  })
+  .then(function () {
+    $("#rg").removeClass("bounce");
+    return;
+  })
+  .catch(function (reason) { console.error(reason); });
+
+
+
+
+
 
   $("a").on("click", function () {
     if ($(".wrapper").hasClass("show")) {
@@ -7129,5 +7342,21 @@ function main () {
 
 
 }
+
+
+
+
+/*! Copyright (c) 2013 Brandon Aaron (http://brandon.aaron.sh)
+ * Licensed under the MIT License (LICENSE.txt).
+ *
+ * Version: 3.1.12
+ *
+ * Requires: jQuery 1.2.2+
+ */
+!function(a){"function"==typeof define&&define.amd?define(["jquery"],a):"object"==typeof exports?module.exports=a:a(jQuery);}(function(a){function b(b){var g=b||window.event,h=i.call(arguments,1),j=0,l=0,m=0,n=0,o=0,p=0;if(b=a.event.fix(g),b.type="mousewheel","detail"in g&&(m=-1*g.detail),"wheelDelta"in g&&(m=g.wheelDelta),"wheelDeltaY"in g&&(m=g.wheelDeltaY),"wheelDeltaX"in g&&(l=-1*g.wheelDeltaX),"axis"in g&&g.axis===g.HORIZONTAL_AXIS&&(l=-1*m,m=0),j=0===m?l:m,"deltaY"in g&&(m=-1*g.deltaY,j=m),"deltaX"in g&&(l=g.deltaX,0===m&&(j=-1*l)),0!==m||0!==l){if(1===g.deltaMode){var q=a.data(this,"mousewheel-line-height");j*=q,m*=q,l*=q;}else if(2===g.deltaMode){var r=a.data(this,"mousewheel-page-height");j*=r,m*=r,l*=r;}if(n=Math.max(Math.abs(m),Math.abs(l)),(!f||f>n)&&(f=n,d(g,n)&&(f/=40)),d(g,n)&&(j/=40,l/=40,m/=40),j=Math[j>=1?"floor":"ceil"](j/f),l=Math[l>=1?"floor":"ceil"](l/f),m=Math[m>=1?"floor":"ceil"](m/f),k.settings.normalizeOffset&&this.getBoundingClientRect){var s=this.getBoundingClientRect();o=b.clientX-s.left,p=b.clientY-s.top;}return b.deltaX=l,b.deltaY=m,b.deltaFactor=f,b.offsetX=o,b.offsetY=p,b.deltaMode=0,h.unshift(b,j,l,m),e&&clearTimeout(e),e=setTimeout(c,200),(a.event.dispatch||a.event.handle).apply(this,h)}}function c(){f=null;}function d(a,b){return k.settings.adjustOldDeltas&&"mousewheel"===a.type&&b%120===0}var e,f,g=["wheel","mousewheel","DOMMouseScroll","MozMousePixelScroll"],h="onwheel"in document||document.documentMode>=9?["wheel"]:["mousewheel","DomMouseScroll","MozMousePixelScroll"],i=Array.prototype.slice;if(a.event.fixHooks){ for(var j=g.length;j;){ a.event.fixHooks[g[--j]]=a.event.mouseHooks; } }var k=a.event.special.mousewheel={version:"3.1.12",setup:function(){
+var this$1 = this;
+if(this.addEventListener){ for(var c=h.length;c;){ this$1.addEventListener(h[--c],b,!1); } }else { this.onmousewheel=b; }a.data(this,"mousewheel-line-height",k.getLineHeight(this)),a.data(this,"mousewheel-page-height",k.getPageHeight(this));},teardown:function(){
+var this$1 = this;
+if(this.removeEventListener){ for(var c=h.length;c;){ this$1.removeEventListener(h[--c],b,!1); } }else { this.onmousewheel=null; }a.removeData(this,"mousewheel-line-height"),a.removeData(this,"mousewheel-page-height");},getLineHeight:function(b){var c=a(b),d=c["offsetParent"in a.fn?"offsetParent":"parent"]();return d.length||(d=a("body")),parseInt(d.css("fontSize"),10)||parseInt(c.css("fontSize"),10)||16},getPageHeight:function(b){return a(b).height()},settings:{adjustOldDeltas:!0,normalizeOffset:!0}};a.fn.extend({mousewheel:function(a){return a?this.bind("mousewheel",a):this.trigger("mousewheel")},unmousewheel:function(a){return this.unbind("mousewheel",a)}});});
 
 }());

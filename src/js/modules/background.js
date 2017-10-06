@@ -7,7 +7,6 @@ function init (count) {
 
   bg = d3
     .selectAll(".wrapper")
-    // .selectAll(".backgroundContainer")
     .append("svg")
     .classed("background", true)
     .append("g")
@@ -31,7 +30,7 @@ function resize () {
   var h = $(document).outerHeight(true);
 
 
-  d3.select(".wrapper svg")
+  d3.select("svg.background")
     .attr("width", w)
     .attr("height", h)
     .select("g")

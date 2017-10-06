@@ -1,6 +1,6 @@
 body {
   position: relative; overflow: hidden;
-  font-family: Source Sans Pro, sans-serif; font-size: 16px;
+  font-family: "Droid Serif", serif; font-size: 16px;
   background-color: #e55b17;
 }
 
@@ -24,7 +24,6 @@ a#logocf:hover {
   transform: translateY(-100vh);
   transition: 0.5s;
 }
-
 .wrapper.show {
   transform: translateY(0);
 }
@@ -33,39 +32,92 @@ a#logocf:hover {
   position: relative; z-index: 2;
   padding: 5vh 0;
   height: 100vh;
+  box-sizing: border-box;
 }
 
 .textcontainer {
+  overflow: hidden;
   width: 800px; height: 90vh;
-  margin: 0 auto; padding: 8px 24px;
+  margin: 24px auto; padding: 24px 48px;
   background-color: #fff;
+  font-size: 1rem; line-height: 1.5rem;
   box-sizing: border-box;
 }
 
 .textcontainer h1 {
-  font-family: Baloo Bhaijaan;
+  padding-bottom: 1.5rem;
+  font-family: Baloo Bhaijaan, serif;
   font-size: 36px;
 }
 
-
+.textscroller {
+  box-sizing: border-box;
+}
 
 .gallerywrapper {
-  z-index: 3;
+  position: relative; z-index: 3;
   height: 100vh;
+}
+
+.gallerycontainer {
+  position: absolute;
+  top: 0; bottom: 0; 
+  left: calc(50vw - 350px); width: 700px;
+  z-index: 1;
+}
+.gallerycontainer img {
+  display: block;
+  position: absolute;
+}
+
+.info {
+  position: absolute;
+  top: 10px; left: 10px;
+  color: #111;
+  font-size: 32px; font-family: Baloo Bhaijaan; font-weight: bold;
+}
+
+#rg {
+  z-index: 51;
+  pointer-events: none;
+}
+
+#studio {
+  z-index: 52;
+  left: 50px; bottom: 14px;
+  width: 600px; height: auto;
+  pointer-events: none;
 }
 
 svg.background {
   position: absolute; z-index: 1;
   top: 0;
 }
-
 svg.background path {
   stroke-width: 0;
   fill: #d4e517;
 }
 
+.shapescontainer { position: absolute; z-index: 1000; right: 0; bottom: 0; left: 0; }
+.shapescontainer path {
+  fill: transparent;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.shapescontainer path:hover {
+  stroke: red;
+  stroke-width: 4px;
+}
 
-
+.peoplecontainer { position: absolute; z-index: auto; top: 0; right: 0; bottom: 0; left: 0; }
+.peoplecontainer > img {
+  transform-origin: center 70%;
+  position: absolute;
+  height: auto;
+  cursor: pointer;
+  transition: 0.1s;
+  user-select: none; -moz-user-select: none; -webkit-user-select: none; -ms-user-select: none;
+}
 
 @-webkit-keyframes rotate {
   from {
@@ -107,6 +159,249 @@ svg.background path {
   -ms-animation: rotate 480s linear infinite;
   -o-animation: rotate 480s linear infinite;
   animation: rotate 480s linear infinite;
+}
+
+
+.animated {
+  -webkit-animation-duration: 0.95s;
+  animation-duration: 0.95s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+.animated#rg {
+  -webkit-animation-duration: 1.5s;
+  animation-duration: 1.5s;
+}
+
+.animated.infinite {
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+}
+
+
+
+@-webkit-keyframes bounce {
+  from, 20%, 53%, 80%, to {
+    -webkit-animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    -webkit-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
+  }
+
+  40%, 43% {
+    -webkit-animation-timing-function: cubic-bezier(0.755, 0.050, 0.855, 0.060);
+    animation-timing-function: cubic-bezier(0.755, 0.050, 0.855, 0.060);
+    -webkit-transform: translate3d(0, -30px, 0);
+    transform: translate3d(0, -30px, 0);
+  }
+
+  70% {
+    -webkit-animation-timing-function: cubic-bezier(0.755, 0.050, 0.855, 0.060);
+    animation-timing-function: cubic-bezier(0.755, 0.050, 0.855, 0.060);
+    -webkit-transform: translate3d(0, -15px, 0);
+    transform: translate3d(0, -15px, 0);
+  }
+
+  90% {
+    -webkit-transform: translate3d(0,-4px,0);
+    transform: translate3d(0,-4px,0);
+  }
+}
+
+@keyframes bounce {
+  from, 20%, 53%, 80%, to {
+    -webkit-animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    -webkit-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
+  }
+
+  40%, 43% {
+    -webkit-animation-timing-function: cubic-bezier(0.755, 0.050, 0.855, 0.060);
+    animation-timing-function: cubic-bezier(0.755, 0.050, 0.855, 0.060);
+    -webkit-transform: translate3d(0, -30px, 0);
+    transform: translate3d(0, -30px, 0);
+  }
+
+  70% {
+    -webkit-animation-timing-function: cubic-bezier(0.755, 0.050, 0.855, 0.060);
+    animation-timing-function: cubic-bezier(0.755, 0.050, 0.855, 0.060);
+    -webkit-transform: translate3d(0, -15px, 0);
+    transform: translate3d(0, -15px, 0);
+  }
+
+  90% {
+    -webkit-transform: translate3d(0,-4px,0);
+    transform: translate3d(0,-4px,0);
+  }
+}
+
+.bounce {
+  -webkit-animation-name: bounce;
+  animation-name: bounce;
+  -webkit-transform-origin: center bottom;
+  transform-origin: center bottom;
+}
+
+
+@-webkit-keyframes bounceIn {
+  from, 20%, 40%, 60%, 80%, to {
+    -webkit-animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+  }
+
+  0% {
+    opacity: 0;
+    -webkit-transform: scale3d(.3, .3, .3);
+    transform: scale3d(.3, .3, .3);
+  }
+
+  20% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1);
+    transform: scale3d(1.1, 1.1, 1.1);
+  }
+
+  40% {
+    -webkit-transform: scale3d(.9, .9, .9);
+    transform: scale3d(.9, .9, .9);
+  }
+
+  60% {
+    opacity: 1;
+    -webkit-transform: scale3d(1.03, 1.03, 1.03);
+    transform: scale3d(1.03, 1.03, 1.03);
+  }
+
+  80% {
+    -webkit-transform: scale3d(.97, .97, .97);
+    transform: scale3d(.97, .97, .97);
+  }
+
+  to {
+    opacity: 1;
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+@keyframes bounceIn {
+  from, 20%, 40%, 60%, 80%, to {
+    -webkit-animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+  }
+
+  0% {
+    opacity: 0;
+    -webkit-transform: scale3d(.3, .3, .3);
+    transform: scale3d(.3, .3, .3);
+  }
+
+  20% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1);
+    transform: scale3d(1.1, 1.1, 1.1);
+  }
+
+  40% {
+    -webkit-transform: scale3d(.9, .9, .9);
+    transform: scale3d(.9, .9, .9);
+  }
+
+  60% {
+    opacity: 1;
+    -webkit-transform: scale3d(1.03, 1.03, 1.03);
+    transform: scale3d(1.03, 1.03, 1.03);
+  }
+
+  80% {
+    -webkit-transform: scale3d(.97, .97, .97);
+    transform: scale3d(.97, .97, .97);
+  }
+
+  to {
+    opacity: 1;
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+.bounceIn {
+  -webkit-animation-name: bounceIn;
+  animation-name: bounceIn;
+}
+
+
+@-webkit-keyframes bounceInRight {
+  from, 60%, 75%, 90%, to {
+    -webkit-animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+  }
+
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(3000px, 0, 0);
+    transform: translate3d(3000px, 0, 0);
+  }
+
+  60% {
+    opacity: 1;
+    -webkit-transform: translate3d(-25px, 0, 0);
+    transform: translate3d(-25px, 0, 0);
+  }
+
+  75% {
+    -webkit-transform: translate3d(10px, 0, 0);
+    transform: translate3d(10px, 0, 0);
+  }
+
+  90% {
+    -webkit-transform: translate3d(-5px, 0, 0);
+    transform: translate3d(-5px, 0, 0);
+  }
+
+  to {
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+
+@keyframes bounceInRight {
+  from, 60%, 75%, 90%, to {
+    -webkit-animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+  }
+
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(3000px, 0, 0);
+    transform: translate3d(3000px, 0, 0);
+  }
+
+  60% {
+    opacity: 1;
+    -webkit-transform: translate3d(-25px, 0, 0);
+    transform: translate3d(-25px, 0, 0);
+  }
+
+  75% {
+    -webkit-transform: translate3d(10px, 0, 0);
+    transform: translate3d(10px, 0, 0);
+  }
+
+  90% {
+    -webkit-transform: translate3d(-5px, 0, 0);
+    transform: translate3d(-5px, 0, 0);
+  }
+
+  to {
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+
+.bounceInRight {
+  -webkit-animation-name: bounceInRight;
+  animation-name: bounceInRight;
 }
 
 

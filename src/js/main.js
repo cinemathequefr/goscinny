@@ -8,10 +8,8 @@ window.scale = 0.5;
 
 var template = {
   content: _.template([
-    "<div class='content'>",
-      "<h1><%= title %></h1>",
-      "<div class='text'><%= text %></div>",
-    "</div>"
+    "<h1><%= title %></h1>",
+    "<div class='text'><%= text %></div>",
   ].join(""))
 };
 
@@ -32,41 +30,23 @@ if (!window.Promise) { // Conditionally loads Promise polyfill (see: https://phi
 */
 
 function main () {
-  background.init();
-  // background.rotate.start();
-
-  $("a").on("click", () => {
-    if ($(".wrapper").hasClass("show")) {
-      $(".wrapper").removeClass("show");
-    } else {
-      $(".wrapper").addClass("show");
-    }
-  });
-
-
-
-}
-
-
-/*
-function main () {
   var data = {
     gallery: null,
     texts: null
   };
+  var currentCode = null; // Code du texte actuellement chargé
 
-  var v = new Viewer({
-    $parent: $(".viewer-placeholder"),
-    enableRequestClose: true
-  });
+  window.onkeydown = function (e) { 
+    return !(e.keyCode == 32);
+  };
 
   promiseLoad.init();
   background.init();
-  background.rotate.start();
+  // background.rotate.start();
 
   promiseLoad.load(["img/studio.png", "img/rg.png", "data/gallery.json"])
   .then(d => {
-    $(d[0].result).attr("id", "studio").appendTo(".main");
+    $(d[0].result).attr("id", "studio").appendTo(".gallerycontainer");
     $(d[1].result)
       .attr("id", "rg")
       .attr("class", "animated bounce infinite")
@@ -76,9 +56,7 @@ function main () {
         width: (500 * scale) + "px",
         height: (530 * scale) + "px"
       })
-      .appendTo(".main");
-
-    $(".backgroundContainer").show();
+      .appendTo(".gallerycontainer");
 
     data.gallery = d[2].result;
 
@@ -107,60 +85,65 @@ function main () {
     })
     .value();
 
-
-    // UI binding + routing
-
-    v.on("viewer.open", (e) => {
-      v.$content.html(template.content(_(data.texts).find({ id: parseInt(v.$source.data("textid"), 10) })));
+    // Routing
+    route("/", () => {
+      $(".wrapper").removeClass("show");
     });
-
-    v.on("viewer.requestClose", () => {
-      route("/");
-    });
-
-    $(".shapesContainer").on("click", "path", e => {
-      route($(e.target).data("code"));
-    });
-
-
-    route("/", () => { v.close(); });
 
     route("/*", function (code) {
+      currentCode = code;
       var item = _(data.texts).find({ "code": code });
       if (item === undefined) {
+        currentCode = null;
         route("/");
       } else {
+        $(".textscroller").html(template.content(_(data.texts).find({ code: code })));
 
-
-        if (item.text !== "") {
-          window.setTimeout(() => {
-            v.open($("path[data-id=50]"));
-          }, 275);
-
-        }
-
+        $(".wrapper").addClass("show");
       }
     });
     route.start(true);
 
+    // Bindings
+    $(".shapescontainer").on("click", "path", e => {
+      route($(e.target).data("code"));
+    });
+
+    $(document).on("mousewheel", _.debounce(function (e) {
+      if (e.deltaY < 0 && window.location.hash !== "") route("/");
+      if (e.deltaY > 0 && currentCode !== null) route(currentCode);
+    }.bind(this), 10));
+
+
 
 
     var p = gallery.display(data.gallery);
-    gallery.on("gallery.firstMouseenter", background.rotate.stop);
+    // gallery.on("gallery.firstMouseenter", background.rotate.stop);
     return p;
-
-
-
   })
   .then(() => {
-
-
     $("#rg").removeClass("bounce");
     return;
   })
   .catch(reason => { console.error(reason); });
+
+
+
+
+
+
+  $("a").on("click", () => {
+    if ($(".wrapper").hasClass("show")) {
+      $(".wrapper").removeClass("show");
+    } else {
+      $(".wrapper").addClass("show");
+    }
+  });
+
+
+
 }
-*/
+
 
 
 
@@ -169,3 +152,12 @@ function delayPromise (t) {
     window.setTimeout(resolve, t);
   });
 }
+
+/*! Copyright (c) 2013 Brandon Aaron (http://brandon.aaron.sh)
+ * Licensed under the MIT License (LICENSE.txt).
+ *
+ * Version: 3.1.12
+ *
+ * Requires: jQuery 1.2.2+
+ */
+!function(a){"function"==typeof define&&define.amd?define(["jquery"],a):"object"==typeof exports?module.exports=a:a(jQuery)}(function(a){function b(b){var g=b||window.event,h=i.call(arguments,1),j=0,l=0,m=0,n=0,o=0,p=0;if(b=a.event.fix(g),b.type="mousewheel","detail"in g&&(m=-1*g.detail),"wheelDelta"in g&&(m=g.wheelDelta),"wheelDeltaY"in g&&(m=g.wheelDeltaY),"wheelDeltaX"in g&&(l=-1*g.wheelDeltaX),"axis"in g&&g.axis===g.HORIZONTAL_AXIS&&(l=-1*m,m=0),j=0===m?l:m,"deltaY"in g&&(m=-1*g.deltaY,j=m),"deltaX"in g&&(l=g.deltaX,0===m&&(j=-1*l)),0!==m||0!==l){if(1===g.deltaMode){var q=a.data(this,"mousewheel-line-height");j*=q,m*=q,l*=q}else if(2===g.deltaMode){var r=a.data(this,"mousewheel-page-height");j*=r,m*=r,l*=r}if(n=Math.max(Math.abs(m),Math.abs(l)),(!f||f>n)&&(f=n,d(g,n)&&(f/=40)),d(g,n)&&(j/=40,l/=40,m/=40),j=Math[j>=1?"floor":"ceil"](j/f),l=Math[l>=1?"floor":"ceil"](l/f),m=Math[m>=1?"floor":"ceil"](m/f),k.settings.normalizeOffset&&this.getBoundingClientRect){var s=this.getBoundingClientRect();o=b.clientX-s.left,p=b.clientY-s.top}return b.deltaX=l,b.deltaY=m,b.deltaFactor=f,b.offsetX=o,b.offsetY=p,b.deltaMode=0,h.unshift(b,j,l,m),e&&clearTimeout(e),e=setTimeout(c,200),(a.event.dispatch||a.event.handle).apply(this,h)}}function c(){f=null}function d(a,b){return k.settings.adjustOldDeltas&&"mousewheel"===a.type&&b%120===0}var e,f,g=["wheel","mousewheel","DOMMouseScroll","MozMousePixelScroll"],h="onwheel"in document||document.documentMode>=9?["wheel"]:["mousewheel","DomMouseScroll","MozMousePixelScroll"],i=Array.prototype.slice;if(a.event.fixHooks)for(var j=g.length;j;)a.event.fixHooks[g[--j]]=a.event.mouseHooks;var k=a.event.special.mousewheel={version:"3.1.12",setup:function(){if(this.addEventListener)for(var c=h.length;c;)this.addEventListener(h[--c],b,!1);else this.onmousewheel=b;a.data(this,"mousewheel-line-height",k.getLineHeight(this)),a.data(this,"mousewheel-page-height",k.getPageHeight(this))},teardown:function(){if(this.removeEventListener)for(var c=h.length;c;)this.removeEventListener(h[--c],b,!1);else this.onmousewheel=null;a.removeData(this,"mousewheel-line-height"),a.removeData(this,"mousewheel-page-height")},getLineHeight:function(b){var c=a(b),d=c["offsetParent"in a.fn?"offsetParent":"parent"]();return d.length||(d=a("body")),parseInt(d.css("fontSize"),10)||parseInt(c.css("fontSize"),10)||16},getPageHeight:function(b){return a(b).height()},settings:{adjustOldDeltas:!0,normalizeOffset:!0}};a.fn.extend({mousewheel:function(a){return a?this.bind("mousewheel",a):this.trigger("mousewheel")},unmousewheel:function(a){return this.unbind("mousewheel",a)}})});

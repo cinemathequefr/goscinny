@@ -4,7 +4,7 @@
 function display (data) { // `data` est un objet contenant les informations sur chaque item de la galerie, y compris le blob image.
   return new Promise((resolve, reject) => {
     _(data).orderBy("order").reverse().forEach((d, i, j) => {
-      d3.select(".shapesContainer")
+      d3.select(".shapescontainer")
       .datum(d)
       .append("path")
       .attr("d", d.path)
@@ -30,25 +30,21 @@ function display (data) { // `data` est un objet contenant les informations sur 
           })
           .addClass("animated")
           .addClass(anim)
-          .appendTo(".peopleContainer")
-          .on("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", () => {
+          .appendTo(".peoplecontainer")
+          .one("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", () => {
             $("path[data-id='" + d.id + "']").show();
           });
 
           // Traitements finaux (à la dernière image)
           if (i === j.length - 1) {
-
-
-
-
-            $(".shapesContainer").one("mouseenter", "path", e => {
+            $(".shapescontainer").one("mouseenter", "path", e => {
               mouseenter(e);
               $.publish("gallery.firstMouseenter");
-              $(".shapesContainer").on("mouseenter", "path", e => {
+              $(".shapescontainer").on("mouseenter", "path", e => {
                 mouseenter(e);
               });
             });
-            $(d.img).on("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", resolve);
+            $(d.img).one("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", resolve);
           }
         },
         (35 * i) // Sans délai supplémentaire pour les 2 derniers personnages
