@@ -4,7 +4,6 @@ import gallery from "./modules/gallery.js";
 import promiseLoad from "./modules/promiseload.js";
 import Viewer from "./modules/viewer.js";
 
-
 window.scale = 0.5;
 
 var template = {
@@ -15,8 +14,6 @@ var template = {
     "</div>"
   ].join(""))
 };
-
-
 
 $(main);
 
@@ -34,6 +31,24 @@ if (!window.Promise) { // Conditionally loads Promise polyfill (see: https://phi
 }
 */
 
+function main () {
+  background.init();
+  // background.rotate.start();
+
+  $("a").on("click", () => {
+    if ($(".wrapper").hasClass("show")) {
+      $(".wrapper").removeClass("show");
+    } else {
+      $(".wrapper").addClass("show");
+    }
+  });
+
+
+
+}
+
+
+/*
 function main () {
   var data = {
     gallery: null,
@@ -144,26 +159,10 @@ function main () {
     return;
   })
   .catch(reason => { console.error(reason); });
-
-
-
-
-
-
-
-}
-
-
-/*
-function preloadWithPromise (queue, manifest, doRemoveAll) {
-  if (!!doRemoveAll) queue.removeAll();
-  queue.loadManifest(manifest);
-  return new Promise((resolve, reject) => {
-    queue.on("complete", () => { resolve(queue.getItems()); });
-    queue.on("error", () => { reject("Erreur de chargement."); });
-  });
 }
 */
+
+
 
 function delayPromise (t) {
   return new Promise((resolve, reject) => {

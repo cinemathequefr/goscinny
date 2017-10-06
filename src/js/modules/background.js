@@ -6,8 +6,10 @@ function init (count) {
   count = count || 40;
 
   bg = d3
-    .selectAll(".backgroundContainer")
+    .selectAll(".wrapper")
+    // .selectAll(".backgroundContainer")
     .append("svg")
+    .classed("background", true)
     .append("g")
     .append("g")
     .classed("rotate stop", true);
@@ -24,11 +26,20 @@ function init (count) {
 }
 
 function resize () {
-  d3.select(".backgroundContainer svg")
-    .attr("width", window.innerWidth)
-    .attr("height", window.innerHeight)
+
+  var w = $(document).outerWidth(true);
+  var h = $(document).outerHeight(true);
+
+
+  d3.select(".wrapper svg")
+    .attr("width", w)
+    .attr("height", h)
     .select("g")
-    .attr("transform", "translate(" + (window.innerWidth / 2) + "," + (window.innerHeight - 150) + ")");
+    .attr("transform", "translate(" + (w / 2) + "," + (h - 150) + ")");
+    // .attr("width", window.innerWidth)
+    // .attr("height", window.innerHeight)
+    // .select("g")
+    // .attr("transform", "translate(" + (window.innerWidth / 2) + "," + (window.innerHeight - 150) + ")");
 }
 
 rotate = {
