@@ -16,27 +16,35 @@
     <meta property="og:image:height" content="246">
     -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ani mate.css/3.5.2/animate.min.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+
+
     <link rel="stylesheet" href="src/css/main.css">
-    <link rel="stylesheet" href="src/css/viewer.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PreloadJS/0.6.0/preloadjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.10/js/min/perfect-scrollbar.jquery.min.js"></script>
+
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.28/webfontloader.js"></script>
-    <script>WebFont.load({google:{families:["Droid+Serif:400,400italic,600,600italic", "Baloo+Bhaijaan"]}});</script>
+    <script>WebFont.load({google:{families:["Exo+2:400,400italic", "Baloo+Bhaijaan"]}});</script>
     <script src="dist/bundle.js"></script>
     <title>Goscinny &amp; le cinéma - La Cinémathèque française</title>
   </head>
   <body>
 
     <div class="wrapper">
+
+
       <div class="textwrapper">
-        <div class="textcontainer">
-          <div class="textscroller">
+        <div class="textoutercontainer">
+          <div class="textinnercontainer">
+            <div class="textscroller"></div>
           </div>
         </div>
+        <a href="#" class="caret-down animated"></a>
       </div>
+
       <div class="gallerywrapper">
         <div class="info"></div>
         <div class="gallerycontainer">

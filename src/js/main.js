@@ -2,7 +2,6 @@ import route from "riot-route";
 import background from "./modules/background.js";
 import gallery from "./modules/gallery.js";
 import promiseLoad from "./modules/promiseload.js";
-import Viewer from "./modules/viewer.js";
 
 window.scale = 0.5;
 
@@ -40,9 +39,16 @@ function main () {
     return !(e.keyCode == 32);
   };
 
+  $(".textinnercontainer").perfectScrollbar({
+    suppressScrollX: true,
+    wheelSpeed: 3
+  });
+
+
   promiseLoad.init();
   background.init();
-  // background.rotate.start();
+  background.rotate.start();
+  window.setTimeout(background.rotate.stop, 60000);
 
   promiseLoad.load(["img/studio.png", "img/rg.png", "data/gallery.json"])
   .then(d => {
@@ -86,8 +92,11 @@ function main () {
     .value();
 
     // Routing
+
     route("/", () => {
       $(".wrapper").removeClass("show");
+      $("a.caret-down").removeClass("rubberBand");
+      $("svg.background").removeClass("uderzo");
     });
 
     route("/*", function (code) {
@@ -97,9 +106,20 @@ function main () {
         currentCode = null;
         route("/");
       } else {
-        $(".textscroller").html(template.content(_(data.texts).find({ code: code })));
+        if (code === "albert-uderzo") {
+          $("svg.background").addClass("uderzo");
+        } else {
+          $("svg.background").removeClass("uderzo");
+        }
 
+
+        $(".textscroller").html(template.content(_(data.texts).find({ code: code })));
+        $(".textinnercontainer").scrollTop(0).perfectScrollbar("update");
         $(".wrapper").addClass("show");
+        $("a.caret-down").hide();
+        window.setTimeout(() => {
+          $("a.caret-down").show().addClass("rubberBand");
+        }, 450);
       }
     });
     route.start(true);
