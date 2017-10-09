@@ -112,7 +112,7 @@ a#logocf:hover {
 svg.background {
   position: absolute; z-index: 1;
   top: 0;
-  transition: 5s;
+  transition: 2s;
 }
 
 svg.background.uderzo {
@@ -122,7 +122,7 @@ svg.background.uderzo {
 svg.background path {
   stroke-width: 0;
   fill: #d4e517;
-  transition: 5s;
+  transition: 2s;
 }
 
 svg.background.uderzo path {
