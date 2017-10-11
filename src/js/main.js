@@ -1,5 +1,6 @@
 import route from "riot-route";
 import background from "./modules/background.js";
+import balloon from "./modules/balloon.js";
 import gallery from "./modules/gallery.js";
 import promiseLoad from "./modules/promiseload.js";
 
@@ -50,7 +51,7 @@ function main () {
   background.rotate.start();
   window.setTimeout(background.rotate.stop, 60000);
 
-  promiseLoad.load(["img/studio.png", "img/rg.png", "data/gallery.json"])
+  promiseLoad.load(["img/studio.png", "img/rg.png", "img/balloon.png", "data/gallery.json"])
   .then(d => {
     $(d[0].result).attr("id", "studio").appendTo(".gallerycontainer");
     $(d[1].result)
@@ -64,7 +65,18 @@ function main () {
       })
       .appendTo(".gallerycontainer");
 
-    data.gallery = d[2].result;
+    $("<div id='balloon'></div>")
+      .appendTo(".gallerycontainer")
+      .css({
+        right: (0 * scale) + "px",
+        bottom: (141 * scale) + "px",
+        width: (315 * scale) + "px",
+        height: (266 * scale) + "px",
+        backgroundImage: "url(" + d[2].result.src + ")"
+
+      });
+
+    data.gallery = d[3].result;
 
     var p = promiseLoad.load(
       ["data/texts.json"].concat(_(data.gallery).map(d => ({ id: d.id, src: "img/people/" + d.id + ".png" })).value()),

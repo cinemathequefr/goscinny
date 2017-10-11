@@ -607,7 +607,7 @@ var gallery = {
 var q;
 var isInit = false;
 
-function init$1 (maxConnections) {
+function init$2 (maxConnections) {
   if (!!isInit) { return; }
   q = new createjs.LoadQueue(true);
   q.setMaxConnections(parseInt(maxConnections, 10) || 8);
@@ -642,7 +642,7 @@ function on$1 (event, callback) {
 (function(n){var u=n({});n.subscribe=function(){u.on.apply(u,arguments);},n.unsubscribe=function(){u.off.apply(u,arguments);},n.publish=function(){u.trigger.apply(u,arguments);};})(jQuery);
 
 var promiseLoad = {
-  init: init$1,
+  init: init$2,
   load: load,
   on: on$1
 };
@@ -695,7 +695,7 @@ function main () {
   background.rotate.start();
   window.setTimeout(background.rotate.stop, 60000);
 
-  promiseLoad.load(["img/studio.png", "img/rg.png", "data/gallery.json"])
+  promiseLoad.load(["img/studio.png", "img/rg.png", "img/balloon.png", "data/gallery.json"])
   .then(function (d) {
     $(d[0].result).attr("id", "studio").appendTo(".gallerycontainer");
     $(d[1].result)
@@ -709,7 +709,18 @@ function main () {
       })
       .appendTo(".gallerycontainer");
 
-    data.gallery = d[2].result;
+    $("<div id='balloon'></div>")
+      .appendTo(".gallerycontainer")
+      .css({
+        right: (0 * scale) + "px",
+        bottom: (141 * scale) + "px",
+        width: (315 * scale) + "px",
+        height: (266 * scale) + "px",
+        backgroundImage: "url(" + d[2].result.src + ")"
+
+      });
+
+    data.gallery = d[3].result;
 
     var p = promiseLoad.load(
       ["data/texts.json"].concat(_(data.gallery).map(function (d) { return ({ id: d.id, src: "img/people/" + d.id + ".png" }); }).value()),
