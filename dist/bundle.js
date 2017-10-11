@@ -127,6 +127,11 @@ var observable = function(el) {
 
 };
 
+/**
+ * Simple client-side router
+ * @module riot-route
+ */
+
 var RE_ORIGIN = /^.+?\/\/+[^/]+/;
 var EVENT_LISTENER = 'EventListener';
 var REMOVE_EVENT_LISTENER = 'remove' + EVENT_LISTENER;
