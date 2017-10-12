@@ -138,7 +138,6 @@ img.gif {
   background-size: contain;
   box-sizing: border-box;
   z-index: 1000;
-  /*display: none; */
 }
 
 svg.background {
@@ -167,10 +166,14 @@ svg.background.uderzo path {
   cursor: pointer;
   transition: 0.2s;
 }
+
+/*
 .shapescontainer path:hover {
   stroke: red;
   stroke-width: 4px;
 }
+*/
+
 
 .peoplecontainer { position: absolute; z-index: auto; top: 0; right: 0; bottom: 0; left: 0; }
 .peoplecontainer > img {
@@ -234,6 +237,11 @@ svg.background.uderzo path {
   animation-duration: 0.95s;
   -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
+}
+
+.animated.fast {
+  -webkit-animation-duration: 0.35s;
+  animation-duration: 0.35s;
 }
 
 .animated#rg {
@@ -508,9 +516,30 @@ svg.background.uderzo path {
   }
 }
 
+@keyframes bounceOutDown {
+  20% {
+    transform: translate3d(0, 10px, 0);
+  }
+
+  40%, 45% {
+    opacity: 1;
+    transform: translate3d(0, -20px, 0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translate3d(0, 2000px, 0);
+  }
+}
+
+.bounceOutDown {
+  animation-name: bounceOutDown;
+}
+
+
 @keyframes rubberBand {
   from {
-    -webkit-transform: scale3d(1, 1, 1);
+    -webkit-transform: scale3d(1, 1, 1);b
     transform: scale3d(1, 1, 1);
   }
 

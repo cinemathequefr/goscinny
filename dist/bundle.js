@@ -127,11 +127,6 @@ var observable = function(el) {
 
 };
 
-/**
- * Simple client-side router
- * @module riot-route
- */
-
 var RE_ORIGIN = /^.+?\/\/+[^/]+/;
 var EVENT_LISTENER = 'EventListener';
 var REMOVE_EVENT_LISTENER = 'remove' + EVENT_LISTENER;
@@ -526,6 +521,43 @@ var background = {
   rotate: rotate
 };
 
+var $elBalloon;
+var t;
+
+function init$1 (_data, elem, img) {
+  var scale = 0.5;
+  $elBalloon = $("<div id='balloon'></div>")
+  .appendTo(elem)
+  .attr("class", "animated fast")
+  .css({
+    right: (0 * scale) + "px",
+    bottom: (141 * scale) + "px",
+    width: (315 * scale) + "px",
+    height: (266 * scale) + "px",
+    backgroundImage: "url(" + img + ")"
+  })
+  .hide();
+}
+
+
+function show (text) {
+  window.clearTimeout(t);
+  $elBalloon.removeClass("bounceOut").html(text).show().addClass("bounceIn");
+}
+
+function hide () {
+  t = window.setTimeout(function () {
+    $elBalloon.removeClass("bounceIn").addClass("bounceOut");
+  }, 250);
+}
+
+
+var balloon = {
+  init: init$1,
+  show: show,
+  hide: hide
+};
+
 function display (data) { // `data` est un objet contenant les informations sur chaque item de la galerie, y compris le blob image.
   return new Promise(function (resolve, reject) {
     _(data).orderBy("order").reverse().forEach(function (d, i, j) {
@@ -582,9 +614,16 @@ function display (data) { // `data` est un objet contenant les informations sur 
 
 function mouseenter (e) {
   var $elem = $(e.target);
-  $(".info").html($elem.data("name"));
-  $elem.one("mouseleave", function (f) { $(".info").html(""); });
+  $.publish("gallery.mouseenter", $elem);
+  $elem.one("mouseleave", function (f) { $.publish("gallery.mouseleave"); });
 }
+/*
+function mouseenter (e) {
+  var $elem = $(e.target);
+  $(".info").html($elem.data("name"));
+  $elem.one("mouseleave", f => { $(".info").html(""); });
+}
+*/
 
 
 function on (event, callback) {
@@ -697,6 +736,7 @@ function main () {
 
   promiseLoad.load(["img/studio.png", "img/rg.png", "img/balloon.png", "data/gallery.json"])
   .then(function (d) {
+    data.gallery = d[3].result;
     $(d[0].result).attr("id", "studio").appendTo(".gallerycontainer");
     $(d[1].result)
       .attr("id", "rg")
@@ -709,6 +749,9 @@ function main () {
       })
       .appendTo(".gallerycontainer");
 
+
+      balloon.init(data.gallery, document.querySelector(".gallerycontainer"), d[2].result.src); // TODO: déplacer après l'affichage de l'écureuil
+/*
     $("<div id='balloon'></div>")
       .appendTo(".gallerycontainer")
       .css({
@@ -717,10 +760,9 @@ function main () {
         width: (315 * scale) + "px",
         height: (266 * scale) + "px",
         backgroundImage: "url(" + d[2].result.src + ")"
-
       });
+*/
 
-    data.gallery = d[3].result;
 
     var p = promiseLoad.load(
       ["data/texts.json"].concat(_(data.gallery).map(function (d) { return ({ id: d.id, src: "img/people/" + d.id + ".png" }); }).value()),
@@ -732,6 +774,10 @@ function main () {
     return p;
   })
   .then(function (assets) {
+
+    $(".info").fadeOut(500);
+
+
     assets = _(assets).map(function (d) { return d.result; }).value();
     data.texts = assets.shift();
 
@@ -790,14 +836,19 @@ function main () {
       if (e.deltaY > 0 && currentCode !== null) { route(currentCode); }
     }.bind(this$1), 10));
 
-
-
-
     var p = gallery.display(data.gallery);
+
+
+
     // gallery.on("gallery.firstMouseenter", background.rotate.stop);
     return p;
   })
   .then(function () {
+
+    gallery.on("gallery.mouseenter", function (e, f) { balloon.show($(f).data("name")); });
+    gallery.on("gallery.mouseleave", function () { balloon.hide(); });
+    // balloon.show();
+
     $("#rg").removeClass("bounce");
     return;
   })

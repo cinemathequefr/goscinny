@@ -57,9 +57,16 @@ function display (data) { // `data` est un objet contenant les informations sur 
 
 function mouseenter (e) {
   var $elem = $(e.target);
+  $.publish("gallery.mouseenter", $elem);
+  $elem.one("mouseleave", f => { $.publish("gallery.mouseleave"); });
+}
+/*
+function mouseenter (e) {
+  var $elem = $(e.target);
   $(".info").html($elem.data("name"));
   $elem.one("mouseleave", f => { $(".info").html(""); });
 }
+*/
 
 
 function on (event, callback) {

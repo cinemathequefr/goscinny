@@ -53,6 +53,7 @@ function main () {
 
   promiseLoad.load(["img/studio.png", "img/rg.png", "img/balloon.png", "data/gallery.json"])
   .then(d => {
+    data.gallery = d[3].result;
     $(d[0].result).attr("id", "studio").appendTo(".gallerycontainer");
     $(d[1].result)
       .attr("id", "rg")
@@ -65,6 +66,9 @@ function main () {
       })
       .appendTo(".gallerycontainer");
 
+
+      balloon.init(data.gallery, document.querySelector(".gallerycontainer"), d[2].result.src); // TODO: déplacer après l'affichage de l'écureuil
+/*
     $("<div id='balloon'></div>")
       .appendTo(".gallerycontainer")
       .css({
@@ -73,10 +77,9 @@ function main () {
         width: (315 * scale) + "px",
         height: (266 * scale) + "px",
         backgroundImage: "url(" + d[2].result.src + ")"
-
       });
+*/
 
-    data.gallery = d[3].result;
 
     var p = promiseLoad.load(
       ["data/texts.json"].concat(_(data.gallery).map(d => ({ id: d.id, src: "img/people/" + d.id + ".png" })).value()),
@@ -88,6 +91,10 @@ function main () {
     return p;
   })
   .then(assets => {
+
+    $(".info").fadeOut(500);
+
+
     assets = _(assets).map(d => d.result).value();
     data.texts = assets.shift();
 
@@ -146,14 +153,19 @@ function main () {
       if (e.deltaY > 0 && currentCode !== null) route(currentCode);
     }.bind(this), 10));
 
-
-
-
     var p = gallery.display(data.gallery);
+
+
+
     // gallery.on("gallery.firstMouseenter", background.rotate.stop);
     return p;
   })
   .then(() => {
+
+    gallery.on("gallery.mouseenter", (e, f) => { balloon.show($(f).data("name")); });
+    gallery.on("gallery.mouseleave", () => { balloon.hide(); });
+    // balloon.show();
+
     $("#rg").removeClass("bounce");
     return;
   })
