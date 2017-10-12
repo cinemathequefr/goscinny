@@ -78,7 +78,7 @@ function main () {
   .then(assets => {
 
     $(".info").fadeOut(500);
-
+    $("#rg").removeClass("bounce");
 
     assets = _(assets).map(d => d.result).value();
     data.texts = assets.shift();
@@ -139,12 +139,12 @@ function main () {
       if (e.deltaY > 0 && currentCode !== null) route(currentCode);
     }.bind(this), 10));
 
+
     return gallery.display(data.gallery); // Promise
   })
   .then(() => {
     gallery.on("gallery.mouseenter", (e, f) => { balloon.show($(f).data("name")); });
     gallery.on("gallery.mouseleave", balloon.hide);
-    $("#rg").removeClass("bounce");
     return;
   })
   .catch(reason => { console.error(reason); });

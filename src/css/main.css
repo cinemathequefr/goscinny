@@ -135,7 +135,7 @@ img.gif {
   padding: 28px 24px 80px 24px;
   font-family: Bangers; font-size: 1.5rem; line-height: 1.5rem;
   text-align: center; text-transform: uppercase;
-  background-size: contain;
+  background-size: contain; background-repeat: no-repeat;
   box-sizing: border-box;
   z-index: 1000;
 }

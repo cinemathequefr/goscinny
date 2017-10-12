@@ -627,7 +627,7 @@ function display (data) { // `data` est un objet contenant les informations sur 
             $(d.img).one("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", resolve);
           }
         },
-        (35 * i) // Sans délai supplémentaire pour les 2 derniers personnages
+        (50 * i) // Sans délai supplémentaire pour les 2 derniers personnages
         // (35 * i) + (i + 2 === j.length ? 750 : 0) + (i + 1 === j.length ? 1500 : 0) // Délai supplémentaire pour les 2 derniers personnages
       );
     });
@@ -784,7 +784,7 @@ function main () {
   .then(function (assets) {
 
     $(".info").fadeOut(500);
-
+    $("#rg").removeClass("bounce");
 
     assets = _(assets).map(function (d) { return d.result; }).value();
     data.texts = assets.shift();
@@ -845,12 +845,12 @@ function main () {
       if (e.deltaY > 0 && currentCode !== null) { route(currentCode); }
     }.bind(this$1), 10));
 
+
     return gallery.display(data.gallery); // Promise
   })
   .then(function () {
     gallery.on("gallery.mouseenter", function (e, f) { balloon.show($(f).data("name")); });
     gallery.on("gallery.mouseleave", balloon.hide);
-    $("#rg").removeClass("bounce");
     return;
   })
   .catch(function (reason) { console.error(reason); });

@@ -47,7 +47,7 @@ function display (data) { // `data` est un objet contenant les informations sur 
             $(d.img).one("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", resolve);
           }
         },
-        (35 * i) // Sans délai supplémentaire pour les 2 derniers personnages
+        (50 * i) // Sans délai supplémentaire pour les 2 derniers personnages
         // (35 * i) + (i + 2 === j.length ? 750 : 0) + (i + 1 === j.length ? 1500 : 0) // Délai supplémentaire pour les 2 derniers personnages
       );
     });
