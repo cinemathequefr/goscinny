@@ -63,8 +63,8 @@ a#logocf:hover {
 
 .textoutercontainer {
   position: absolute; overflow: hidden;
-  top: 5vh; left: calc(50vw - 400px);
-  width: 800px; height: 80vh;
+  top: 1vh; left: calc(50vw - 400px);
+  width: 800px; height: 90vh;
   background-color: #fff;
   box-sizing: border-box;
 }
@@ -82,7 +82,7 @@ a#logocf:hover {
 
 .textscroller h1 {
   margin-top: 0.16em;
-  padding-bottom: 1.5rem;
+  padding-bottom: 1rem;
   font-family: Baloo Bhaijaan, serif;
   font-size: 36px;
 }

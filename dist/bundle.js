@@ -509,11 +509,36 @@ function resize () {
     // .attr("transform", "translate(" + (window.innerWidth / 2) + "," + (window.innerHeight - 150) + ")");
 }
 
+
+rotate = (function () {
+  var t;
+  return {
+    start: function (sec) {
+      bg.classed("stop", false);
+      if (sec) {
+        window.clearTimeout(t);
+        t = window.setTimeout(rotate.stop, sec * 1000);
+      }
+    },
+    stop: function () {
+      bg.classed("stop", true);
+      window.clearTimeout(t);
+    },
+    toggle: function () { bg.classed("stop", !bg.classed("stop")); }
+  }
+})();
+
+
+/*
 rotate = {
-  start: function () { bg.classed("stop", false); },
-  stop: function () { bg.classed("stop", true); },
-  toggle: function () { bg.classed("stop", !bg.classed("stop")); }
+  start: (sec) => {
+    bg.classed("stop", false);
+    if (sec) window.setTimeout(rotate.stop, sec * 1000);
+  },
+  stop: () => { bg.classed("stop", true); },
+  toggle: () => { bg.classed("stop", !bg.classed("stop")); }
 };
+*/
 
 var background = {
   init: init,
@@ -539,7 +564,6 @@ function init$1 (_data, elem, img) {
   .hide();
 }
 
-
 function show (text) {
   window.clearTimeout(t);
   $elBalloon.removeClass("bounceOut").html(text).show().addClass("bounceIn");
@@ -548,9 +572,8 @@ function show (text) {
 function hide () {
   t = window.setTimeout(function () {
     $elBalloon.removeClass("bounceIn").addClass("bounceOut");
-  }, 250);
+  }, 500);
 }
-
 
 var balloon = {
   init: init$1,
@@ -728,41 +751,26 @@ function main () {
     wheelSpeed: 3
   });
 
-
   promiseLoad.init();
   background.init();
-  background.rotate.start();
-  window.setTimeout(background.rotate.stop, 60000);
+  background.rotate.start(30); // Rotation pendant 30 s
 
   promiseLoad.load(["img/studio.png", "img/rg.png", "img/balloon.png", "data/gallery.json"])
   .then(function (d) {
     data.gallery = d[3].result;
     $(d[0].result).attr("id", "studio").appendTo(".gallerycontainer");
     $(d[1].result)
-      .attr("id", "rg")
-      .attr("class", "animated bounce infinite")
-      .css({
-        left: (470 * scale) + "px",
-        bottom: (-60 * scale) + "px",
-        width: (500 * scale) + "px",
-        height: (530 * scale) + "px"
-      })
-      .appendTo(".gallerycontainer");
+    .attr("id", "rg")
+    .attr("class", "animated bounce infinite")
+    .css({
+      left: (470 * scale) + "px",
+      bottom: (-60 * scale) + "px",
+      width: (500 * scale) + "px",
+      height: (530 * scale) + "px"
+    })
+    .appendTo(".gallerycontainer");
 
-
-      balloon.init(data.gallery, document.querySelector(".gallerycontainer"), d[2].result.src); // TODO: déplacer après l'affichage de l'écureuil
-/*
-    $("<div id='balloon'></div>")
-      .appendTo(".gallerycontainer")
-      .css({
-        right: (0 * scale) + "px",
-        bottom: (141 * scale) + "px",
-        width: (315 * scale) + "px",
-        height: (266 * scale) + "px",
-        backgroundImage: "url(" + d[2].result.src + ")"
-      });
-*/
-
+    balloon.init(data.gallery, document.querySelector(".gallerycontainer"), d[2].result.src);
 
     var p = promiseLoad.load(
       ["data/texts.json"].concat(_(data.gallery).map(function (d) { return ({ id: d.id, src: "img/people/" + d.id + ".png" }); }).value()),
@@ -810,6 +818,7 @@ function main () {
       } else {
         if (code === "albert-uderzo") {
           $("svg.background").addClass("uderzo");
+          background.rotate.start(15);
         } else {
           $("svg.background").removeClass("uderzo");
         }
@@ -836,28 +845,15 @@ function main () {
       if (e.deltaY > 0 && currentCode !== null) { route(currentCode); }
     }.bind(this$1), 10));
 
-    var p = gallery.display(data.gallery);
-
-
-
-    // gallery.on("gallery.firstMouseenter", background.rotate.stop);
-    return p;
+    return gallery.display(data.gallery); // Promise
   })
   .then(function () {
-
     gallery.on("gallery.mouseenter", function (e, f) { balloon.show($(f).data("name")); });
-    gallery.on("gallery.mouseleave", function () { balloon.hide(); });
-    // balloon.show();
-
+    gallery.on("gallery.mouseleave", balloon.hide);
     $("#rg").removeClass("bounce");
     return;
   })
   .catch(function (reason) { console.error(reason); });
-
-
-
-
-
 
   $("a").on("click", function () {
     if ($(".wrapper").hasClass("show")) {
@@ -866,21 +862,9 @@ function main () {
       $(".wrapper").addClass("show");
     }
   });
-
-
-
 }
 
 
-
-
-/*! Copyright (c) 2013 Brandon Aaron (http://brandon.aaron.sh)
- * Licensed under the MIT License (LICENSE.txt).
- *
- * Version: 3.1.12
- *
- * Requires: jQuery 1.2.2+
- */
 !function(a){"function"==typeof define&&define.amd?define(["jquery"],a):"object"==typeof exports?module.exports=a:a(jQuery);}(function(a){function b(b){var g=b||window.event,h=i.call(arguments,1),j=0,l=0,m=0,n=0,o=0,p=0;if(b=a.event.fix(g),b.type="mousewheel","detail"in g&&(m=-1*g.detail),"wheelDelta"in g&&(m=g.wheelDelta),"wheelDeltaY"in g&&(m=g.wheelDeltaY),"wheelDeltaX"in g&&(l=-1*g.wheelDeltaX),"axis"in g&&g.axis===g.HORIZONTAL_AXIS&&(l=-1*m,m=0),j=0===m?l:m,"deltaY"in g&&(m=-1*g.deltaY,j=m),"deltaX"in g&&(l=g.deltaX,0===m&&(j=-1*l)),0!==m||0!==l){if(1===g.deltaMode){var q=a.data(this,"mousewheel-line-height");j*=q,m*=q,l*=q;}else if(2===g.deltaMode){var r=a.data(this,"mousewheel-page-height");j*=r,m*=r,l*=r;}if(n=Math.max(Math.abs(m),Math.abs(l)),(!f||f>n)&&(f=n,d(g,n)&&(f/=40)),d(g,n)&&(j/=40,l/=40,m/=40),j=Math[j>=1?"floor":"ceil"](j/f),l=Math[l>=1?"floor":"ceil"](l/f),m=Math[m>=1?"floor":"ceil"](m/f),k.settings.normalizeOffset&&this.getBoundingClientRect){var s=this.getBoundingClientRect();o=b.clientX-s.left,p=b.clientY-s.top;}return b.deltaX=l,b.deltaY=m,b.deltaFactor=f,b.offsetX=o,b.offsetY=p,b.deltaMode=0,h.unshift(b,j,l,m),e&&clearTimeout(e),e=setTimeout(c,200),(a.event.dispatch||a.event.handle).apply(this,h)}}function c(){f=null;}function d(a,b){return k.settings.adjustOldDeltas&&"mousewheel"===a.type&&b%120===0}var e,f,g=["wheel","mousewheel","DOMMouseScroll","MozMousePixelScroll"],h="onwheel"in document||document.documentMode>=9?["wheel"]:["mousewheel","DomMouseScroll","MozMousePixelScroll"],i=Array.prototype.slice;if(a.event.fixHooks){ for(var j=g.length;j;){ a.event.fixHooks[g[--j]]=a.event.mouseHooks; } }var k=a.event.special.mousewheel={version:"3.1.12",setup:function(){
 var this$1 = this;
 if(this.addEventListener){ for(var c=h.length;c;){ this$1.addEventListener(h[--c],b,!1); } }else { this.onmousewheel=b; }a.data(this,"mousewheel-line-height",k.getLineHeight(this)),a.data(this,"mousewheel-page-height",k.getPageHeight(this));},teardown:function(){

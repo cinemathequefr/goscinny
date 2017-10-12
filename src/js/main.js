@@ -45,41 +45,26 @@ function main () {
     wheelSpeed: 3
   });
 
-
   promiseLoad.init();
   background.init();
-  background.rotate.start();
-  window.setTimeout(background.rotate.stop, 60000);
+  background.rotate.start(30); // Rotation pendant 30 s
 
   promiseLoad.load(["img/studio.png", "img/rg.png", "img/balloon.png", "data/gallery.json"])
   .then(d => {
     data.gallery = d[3].result;
     $(d[0].result).attr("id", "studio").appendTo(".gallerycontainer");
     $(d[1].result)
-      .attr("id", "rg")
-      .attr("class", "animated bounce infinite")
-      .css({
-        left: (470 * scale) + "px",
-        bottom: (-60 * scale) + "px",
-        width: (500 * scale) + "px",
-        height: (530 * scale) + "px"
-      })
-      .appendTo(".gallerycontainer");
+    .attr("id", "rg")
+    .attr("class", "animated bounce infinite")
+    .css({
+      left: (470 * scale) + "px",
+      bottom: (-60 * scale) + "px",
+      width: (500 * scale) + "px",
+      height: (530 * scale) + "px"
+    })
+    .appendTo(".gallerycontainer");
 
-
-      balloon.init(data.gallery, document.querySelector(".gallerycontainer"), d[2].result.src); // TODO: déplacer après l'affichage de l'écureuil
-/*
-    $("<div id='balloon'></div>")
-      .appendTo(".gallerycontainer")
-      .css({
-        right: (0 * scale) + "px",
-        bottom: (141 * scale) + "px",
-        width: (315 * scale) + "px",
-        height: (266 * scale) + "px",
-        backgroundImage: "url(" + d[2].result.src + ")"
-      });
-*/
-
+    balloon.init(data.gallery, document.querySelector(".gallerycontainer"), d[2].result.src);
 
     var p = promiseLoad.load(
       ["data/texts.json"].concat(_(data.gallery).map(d => ({ id: d.id, src: "img/people/" + d.id + ".png" })).value()),
@@ -127,6 +112,7 @@ function main () {
       } else {
         if (code === "albert-uderzo") {
           $("svg.background").addClass("uderzo");
+          background.rotate.start(15);
         } else {
           $("svg.background").removeClass("uderzo");
         }
@@ -153,28 +139,15 @@ function main () {
       if (e.deltaY > 0 && currentCode !== null) route(currentCode);
     }.bind(this), 10));
 
-    var p = gallery.display(data.gallery);
-
-
-
-    // gallery.on("gallery.firstMouseenter", background.rotate.stop);
-    return p;
+    return gallery.display(data.gallery); // Promise
   })
   .then(() => {
-
     gallery.on("gallery.mouseenter", (e, f) => { balloon.show($(f).data("name")); });
-    gallery.on("gallery.mouseleave", () => { balloon.hide(); });
-    // balloon.show();
-
+    gallery.on("gallery.mouseleave", balloon.hide);
     $("#rg").removeClass("bounce");
     return;
   })
   .catch(reason => { console.error(reason); });
-
-
-
-
-
 
   $("a").on("click", () => {
     if ($(".wrapper").hasClass("show")) {
@@ -183,12 +156,7 @@ function main () {
       $(".wrapper").addClass("show");
     }
   });
-
-
-
 }
-
-
 
 
 function delayPromise (t) {

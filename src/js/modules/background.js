@@ -41,11 +41,36 @@ function resize () {
     // .attr("transform", "translate(" + (window.innerWidth / 2) + "," + (window.innerHeight - 150) + ")");
 }
 
+
+rotate = (function () {
+  var t;
+  return {
+    start: (sec) => {
+      bg.classed("stop", false);
+      if (sec) {
+        window.clearTimeout(t);
+        t = window.setTimeout(rotate.stop, sec * 1000);
+      }
+    },
+    stop: () => {
+      bg.classed("stop", true);
+      window.clearTimeout(t);
+    },
+    toggle: () => { bg.classed("stop", !bg.classed("stop")); }
+  }
+})();
+
+
+/*
 rotate = {
-  start: () => { bg.classed("stop", false); },
+  start: (sec) => {
+    bg.classed("stop", false);
+    if (sec) window.setTimeout(rotate.stop, sec * 1000);
+  },
   stop: () => { bg.classed("stop", true); },
   toggle: () => { bg.classed("stop", !bg.classed("stop")); }
 };
+*/
 
 export default {
   init: init,

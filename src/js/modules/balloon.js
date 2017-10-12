@@ -18,7 +18,6 @@ function init (_data, elem, img) {
   .hide();
 }
 
-
 function show (text) {
   window.clearTimeout(t);
   $elBalloon.removeClass("bounceOut").html(text).show().addClass("bounceIn");
@@ -27,9 +26,8 @@ function show (text) {
 function hide () {
   t = window.setTimeout(() => {
     $elBalloon.removeClass("bounceIn").addClass("bounceOut");
-  }, 250);
+  }, 500);
 }
-
 
 export default {
   init: init,
