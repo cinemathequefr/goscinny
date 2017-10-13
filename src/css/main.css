@@ -47,6 +47,16 @@ a#logocf:hover {
   opacity: 0.95;
 }
 
+svg#title {
+  position: fixed; z-index: 1;
+  left: 25px; top: 25px;
+  width: 250px; height: 175px;
+}
+
+svg#title g.title-goscinny path { fill: #000; stroke:none; }
+
+svg#title g.title-copains path { fill: #ff3232; stroke: #000; stroke-width: 1.5px; }
+
 .wrapper {
   position: relative; z-index: 1;
   transform: translateY(-100vh);
