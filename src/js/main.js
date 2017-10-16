@@ -45,11 +45,16 @@ function main () {
   });
 
   promiseLoad.init();
-  background.init();
-  background.rotate.start(30); // Rotation pendant 30 s
+  // background.init();
+  // background.rotate.start(30); // Rotation pendant 30 s
 
   promiseLoad.load(["img/studio.png", "img/rg.png", "img/balloon.png", "data/gallery.json"])
   .then(d => {
+
+    background.init();
+    background.rotate.start(30); // Rotation pendant 30 s
+
+
     data.gallery = d[3].result;
     $(d[0].result).attr("id", "studio").appendTo(".gallerycontainer");
     $(d[1].result)
