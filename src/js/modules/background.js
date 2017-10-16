@@ -24,21 +24,15 @@ function init (count) {
   resize();
 }
 
+
 function resize () {
-
-  var w = $(document).outerWidth(true);
-  var h = $(document).outerHeight(true);
-
-
+  var w = $("body").outerWidth(true);
+  var h = $("body").outerHeight(true);
   d3.select("svg.background")
-    .attr("width", w)
-    .attr("height", h)
-    .select("g")
-    .attr("transform", "translate(" + (w / 2) + "," + (h - 150) + ")");
-    // .attr("width", window.innerWidth)
-    // .attr("height", window.innerHeight)
-    // .select("g")
-    // .attr("transform", "translate(" + (window.innerWidth / 2) + "," + (window.innerHeight - 150) + ")");
+  .attr("width", w)
+  .attr("height", h)
+  .select("g")
+  .attr("transform", "translate(" + (w / 2) + "," + (h - 150) + ")");
 }
 
 
@@ -59,18 +53,6 @@ rotate = (function () {
     toggle: () => { bg.classed("stop", !bg.classed("stop")); }
   }
 })();
-
-
-/*
-rotate = {
-  start: (sec) => {
-    bg.classed("stop", false);
-    if (sec) window.setTimeout(rotate.stop, sec * 1000);
-  },
-  stop: () => { bg.classed("stop", true); },
-  toggle: () => { bg.classed("stop", !bg.classed("stop")); }
-};
-*/
 
 export default {
   init: init,

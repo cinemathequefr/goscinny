@@ -12,7 +12,7 @@ export default {
       nodeResolve({ jsnext: true })
     , commonjs()
     , buble()
-    // , uglify()
+    , uglify()
   ],
   // sourcemap: true
   sourcemap: false

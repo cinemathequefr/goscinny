@@ -76,7 +76,6 @@ function main () {
     return p;
   })
   .then(assets => {
-
     $(".info").fadeOut(500);
     $("#rg").removeClass("bounce");
 
@@ -119,7 +118,9 @@ function main () {
 
 
         $(".textscroller").html(template.content(_(data.texts).find({ code: code })));
-        $(".textinnercontainer").scrollTop(0).perfectScrollbar("update");
+        
+        delayPromise(200).then(() => { $(".textinnercontainer").scrollTop(0).perfectScrollbar("update"); });
+
         $(".wrapper").addClass("show");
         $("a.caret-down").hide();
         window.setTimeout(() => {
@@ -130,6 +131,9 @@ function main () {
     route.start(true);
 
     // Bindings
+    $("#title").on("click", () => { route("/"); });
+
+
     $(".shapescontainer").on("click", "path", e => {
       route($(e.target).data("code"));
     });
@@ -138,6 +142,8 @@ function main () {
       if (e.deltaY < 0 && window.location.hash !== "") route("/");
       if (e.deltaY > 0 && currentCode !== null) route(currentCode);
     }.bind(this), 10));
+
+    $(window).on("resize", background.resize);
 
 
     return gallery.display(data.gallery); // Promise
