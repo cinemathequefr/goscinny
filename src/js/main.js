@@ -15,7 +15,6 @@ var template = {
 
 $(main);
 
-
 /*
 if (!window.Promise) { // Conditionally loads Promise polyfill (see: https://philipwalton.com/articles/loading-polyfills-only-when-needed/)
   q.loadFile("dist/vendor/es6-promise.min.js");
@@ -95,14 +94,15 @@ function main () {
     .value();
 
     // Routing
-
     route("/", () => {
+      updateAnalytics();
       $(".wrapper").removeClass("show");
       $("a.caret-down").removeClass("rubberBand");
       $("svg.background").removeClass("uderzo");
     });
 
     route("/*", function (code) {
+      updateAnalytics();
       currentCode = code;
       var item = _(data.texts).find({ "code": code });
       if (item === undefined) {
@@ -132,7 +132,7 @@ function main () {
 
     // Bindings
     $("#title").on("click", () => { route("/"); });
-
+    $(document).on("keyup", e => { if (e.which === 27) route("/"); });
 
     $(".shapescontainer").on("click", "path", e => {
       route($(e.target).data("code"));
@@ -144,7 +144,6 @@ function main () {
     }.bind(this), 10));
 
     $(window).on("resize", background.resize);
-
 
     return gallery.display(data.gallery); // Promise
   })
@@ -170,6 +169,12 @@ function delayPromise (t) {
     window.setTimeout(resolve, t);
   });
 }
+
+
+function updateAnalytics () {
+  ga("send", "pageview", document.location.href);
+}
+
 
 /*! Copyright (c) 2013 Brandon Aaron (http://brandon.aaron.sh)
  * Licensed under the MIT License (LICENSE.txt).
